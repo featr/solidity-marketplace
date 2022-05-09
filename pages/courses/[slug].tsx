@@ -18,8 +18,8 @@ export default function Course({ course }: { course: CourseContent }) {
         description={course.description}
         image={course.coverImage}
       />
-      <Keypoints />
-      <Curriculum />
+      <Keypoints points={course.wsl} />
+      <Curriculum locked={true} />
       <Modal />
     </>
   );
