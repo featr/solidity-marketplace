@@ -13,4 +13,4 @@ export default function Course() {
   );
 }
 
-Course.Layout = BaseLayout
+Course.Layout = BaseLayout;
