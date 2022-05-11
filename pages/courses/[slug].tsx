@@ -1,6 +1,6 @@
-import { Modal } from "@components/common";
-import { CourseHero, Curriculum, Keypoints } from "@components/course";
-import { BaseLayout } from "@components/layout";
+import { Modal } from "@components/ui/common";
+import { CourseHero, Curriculum, Keypoints } from "@components/ui/course";
+import { BaseLayout } from "@components/ui/layout";
 import { CourseContent, getAllCourses } from "@content/courses/fetcher";
 import { GetStaticPaths, GetStaticProps } from "next/types";
 
