@@ -5,9 +5,9 @@ const DEFAULT_HOOKS = {
   useAccount: () => {},
 };
 
-export const setupHooks = (web3) => {
+export const setupHooks = (web3, provider) => {
   return {
-    useAccount: createUseAccount(web3),
-    useNetwork: createNetworkHook(web3),
+    useAccount: createUseAccount(web3, provider),
+    useNetwork: createNetworkHook(web3, provider),
   };
 };

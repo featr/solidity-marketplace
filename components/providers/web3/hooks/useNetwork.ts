@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useEffect } from "react";
 import Web3 from "web3";
+import { MetaMaskInpageProvider } from "@metamask/providers";
 
 const NETWORKS = {
   1: "Ethereum Main Network",
@@ -12,7 +13,7 @@ const NETWORKS = {
   1337: "Ganache",
 };
 
-export const handler = (web3: Web3) => () => {
+export const handler = (web3: Web3, provider: MetaMaskInpageProvider) => () => {
   const { mutate, ...rest } = useSWR(
     () => (web3 ? "web/network" : null),
     async () => {
@@ -22,11 +23,11 @@ export const handler = (web3: Web3) => () => {
   );
 
   useEffect(() => {
-    window.ethereum &&
-      window.ethereum.on("chainChanged", (chainId) =>
-        mutate(NETWORKS[parseInt(chainId, 16)])
+    provider &&
+      provider.on("chainChanged", (chainId) =>
+        mutate(NETWORKS[parseInt(chainId as string, 16)])
       );
-  }, [mutate]);
+  }, [provider, mutate]);
   return {
     network: {
       mutate,

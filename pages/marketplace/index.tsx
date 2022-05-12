@@ -1,6 +1,5 @@
 import { useAccount } from "@components/hooks/web3/useAccount";
 import { useNetwork } from "@components/hooks/web3/useNetwork";
-import { Hero } from "@components/ui/common";
 import { CourseList } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
 import { EthRates, WalletBar } from "@components/ui/web3";

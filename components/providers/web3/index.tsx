@@ -7,6 +7,8 @@ import {
   useState,
 } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
+import { MetaMaskInpageProvider } from "@metamask/providers";
+
 import Web3 from "web3";
 import { provider } from "web3-core";
 import { setupHooks } from "./hooks/setupHooks";
@@ -14,10 +16,16 @@ type Props = {
   children?: ReactNode;
 };
 
+type Web3Api = {
+  provider: MetaMaskInpageProvider;
+  web3: Web3;
+  contract: any;
+  isLoading: boolean;
+};
 const Web3Context = createContext(null);
 
 const Web3Provider = ({ children }: Props) => {
-  const [web3Api, setWeb3Api] = useState({
+  const [web3Api, setWeb3Api] = useState<Web3Api>({
     provider: null,
     web3: null,
     contract: null,
@@ -25,7 +33,8 @@ const Web3Provider = ({ children }: Props) => {
   });
   useEffect(() => {
     const loadProvider = async () => {
-      const provider = (await detectEthereumProvider()) as typeof window.ethereum;
+      const provider = (await detectEthereumProvider()) as MetaMaskInpageProvider;
+
       if (provider) {
         const web3 = new Web3(provider as provider);
         setWeb3Api({
@@ -50,7 +59,7 @@ const Web3Provider = ({ children }: Props) => {
     return {
       ...web3Api,
       isWeb3Loaded: web3 != null,
-      getHooks: () => setupHooks(web3),
+      getHooks: () => setupHooks(web3, provider),
       connect: provider
         ? async () => {
             try {
