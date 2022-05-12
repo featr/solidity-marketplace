@@ -25,7 +25,7 @@ const Web3Provider = ({ children }: Props) => {
   });
   useEffect(() => {
     const loadProvider = async () => {
-      const provider = await detectEthereumProvider();
+      const provider = (await detectEthereumProvider()) as typeof window.ethereum;
       if (provider) {
         const web3 = new Web3(provider as provider);
         setWeb3Api({
