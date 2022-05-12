@@ -1,14 +1,15 @@
 import { useWeb3 } from "@components/providers";
-import { useAccount } from "@components/web3/hooks/useAccount";
+import { useAccount } from "@components/hooks/web3/useAccount";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { ConnectButton } from "..";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { connect, isWeb3Loaded, isLoading } = useWeb3();
   const { account } = useAccount();
   const { data, isAdmin } = account;
-
+  const { pathname } = useRouter();
   const renderNavbarConnectButton = (): ReactElement => {
     if (isLoading) {
       return <ConnectButton disabled>Loading...</ConnectButton>;
@@ -42,7 +43,7 @@ const Navbar = () => {
                   Home
                 </a>
               </Link>
-              <Link href="/Home">
+              <Link href="/marketplace">
                 <a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
                   Marketplace
                 </a>
@@ -64,7 +65,7 @@ const Navbar = () => {
           </div>
         </nav>
       </div>
-      {data && (
+      {data && !pathname.includes("/marketplace") && (
         <div className="flex justify-end sm:px-6 lg:px-8">
           <div className="text-white bg-indigo-600 rounded-md p-1">{data}</div>
         </div>
