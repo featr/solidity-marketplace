@@ -1,6 +1,6 @@
 import { useWeb3 } from "@components/providers";
 import { Hero, Breadcrumbs } from "@components/ui/common";
-import { CourseList } from "@components/ui/course";
+import { CourseList, CourseCard } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
 import { OrderCard } from "@components/ui/order";
 import { EthRates, WalletBar } from "@components/ui/web3";
@@ -10,7 +10,9 @@ export default function Home({ courses }: { courses: CourseContent[] }) {
   return (
     <>
       <Hero />
-      <CourseList courses={courses} />
+      <CourseList courses={courses}>
+        {(course) => <CourseCard course={course} key={course.id} />}
+      </CourseList>
     </>
   );
 }

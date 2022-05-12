@@ -30,7 +30,7 @@ export const handler = (
   useEffect(() => {
     provider &&
       provider.on("accountsChanged", (accounts) => mutate(accounts[0] ?? null));
-  }, [provider]);
+  }, [provider, mutate]);
 
   return {
     account: {
