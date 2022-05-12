@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { SWRResponse } from "swr";
 import { useEffect } from "react";
 import Web3 from "web3";
 import { MetaMaskInpageProvider } from "@metamask/providers";
@@ -13,7 +13,16 @@ const NETWORKS = {
   1337: "Ganache",
 };
 
-export const handler = (web3: Web3, provider: MetaMaskInpageProvider) => () => {
+interface NetworkType extends SWRResponse<string, any> {}
+
+export type TCreateUseNetworkHookReturn = {
+  network: NetworkType;
+};
+
+export const handler = (
+  web3: Web3,
+  provider: MetaMaskInpageProvider
+) => (): TCreateUseNetworkHookReturn => {
   const { mutate, ...rest } = useSWR(
     () => (web3 ? "web/network" : null),
     async () => {

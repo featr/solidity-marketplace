@@ -11,12 +11,23 @@ import { MetaMaskInpageProvider } from "@metamask/providers";
 
 import Web3 from "web3";
 import { provider } from "web3-core";
-import { setupHooks } from "./hooks/setupHooks";
+import { SetupHooks, setupHooks } from "./hooks/setupHooks";
+import { TCreateUseAccountHookReturn } from "./hooks/useAccount";
 type Props = {
   children?: ReactNode;
 };
 
 type Web3Api = {
+  provider: MetaMaskInpageProvider;
+  web3: Web3;
+  contract: any;
+  isLoading: boolean;
+};
+
+type TUseWeb3 = {
+  isWeb3Loaded: boolean;
+  getHooks: () => SetupHooks;
+  connect: () => void;
   provider: MetaMaskInpageProvider;
   web3: Web3;
   contract: any;
@@ -54,12 +65,12 @@ const Web3Provider = ({ children }: Props) => {
     loadProvider();
   }, []);
 
-  const _web3Api = useMemo(() => {
+  const _web3Api: TUseWeb3 = useMemo(() => {
     const { web3, provider } = web3Api;
     return {
       ...web3Api,
       isWeb3Loaded: web3 != null,
-      getHooks: () => setupHooks(web3, provider),
+      getHooks: (): SetupHooks => setupHooks(web3, provider),
       connect: provider
         ? async () => {
             try {
@@ -83,11 +94,15 @@ const Web3Provider = ({ children }: Props) => {
   );
 };
 
-export const useWeb3 = () => {
+interface cbInterface<T> {
+  (hooks: SetupHooks): () => T;
+}
+
+export const useWeb3 = (): TUseWeb3 => {
   return useContext(Web3Context);
 };
 
-export const useHooks = (cb) => {
+export const useHooks = <T,>(cb: cbInterface<T>) => {
   const { getHooks } = useWeb3();
   return cb(getHooks());
 };
