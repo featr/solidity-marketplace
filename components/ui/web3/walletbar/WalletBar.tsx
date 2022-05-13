@@ -3,7 +3,12 @@ const WalletBar = ({
   network,
 }: {
   address: string;
-  network: string;
+  network: {
+    data: any;
+    target: string;
+    isSupported: boolean;
+    hasBeenInit: boolean;
+  };
 }) => {
   return (
     <section className="text-white bg-indigo-600">
@@ -24,10 +29,21 @@ const WalletBar = ({
             </div>
           </div>
           <div>
-            <div>
-              <span>Currently on </span>
-              <strong className="text-2xl">{network}</strong>
-            </div>
+            {!network.hasBeenInit && !network.isSupported && (
+              <div className="bg-red-400 p-4 rounded-lg">
+                <div>Connected to wrong Network</div>
+                <div>
+                  Connect to : {``}
+                  <strong className="text-2xl">{network.target}</strong>
+                </div>
+              </div>
+            )}
+            {network.data && (
+              <div>
+                <span>Currently on </span>
+                <strong className="text-2xl">{network.data}</strong>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -13,7 +13,13 @@ const NETWORKS = {
   1337: "Ganache",
 };
 
-interface NetworkType extends SWRResponse<string, any> {}
+const targetNetwork = NETWORKS[process.env.NEXT_PUBLIC_TARGET_CHAIN_ID];
+
+interface NetworkType extends SWRResponse<string, any> {
+  target: string;
+  isSupported: boolean;
+  hasBeenInit: boolean;
+}
 
 export type TCreateUseNetworkHookReturn = {
   network: NetworkType;
@@ -23,7 +29,7 @@ export const handler = (
   web3: Web3,
   provider: MetaMaskInpageProvider
 ) => (): TCreateUseNetworkHookReturn => {
-  const { mutate, ...rest } = useSWR(
+  const { mutate, data, error, ...rest } = useSWR(
     () => (web3 ? "web/network" : null),
     async () => {
       const chainId = await web3.eth.getChainId();
@@ -39,7 +45,11 @@ export const handler = (
   }, [provider, mutate]);
   return {
     network: {
+      data,
+      hasBeenInit: !data && !error,
       mutate,
+      target: targetNetwork,
+      isSupported: data === targetNetwork,
       ...rest,
     },
   };
