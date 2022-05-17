@@ -1,8 +1,15 @@
 import { CourseContent } from "@content/courses/fetcher";
 import Link from "next/link";
 import Image from "next/image";
+import React, { ReactElement, ReactNode } from "react";
 
-const CourseCard = ({ course }: { course: CourseContent }) => {
+const CourseCard = ({
+  course,
+  Footer,
+}: {
+  course: CourseContent;
+  Footer?: () => ReactNode;
+}) => {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
       <div className="flex h-full">
@@ -27,6 +34,7 @@ const CourseCard = ({ course }: { course: CourseContent }) => {
           </Link>
 
           <p className="mt-2 text-gray-500">{course.description}</p>
+          {Footer && Footer()}
         </div>
       </div>
     </div>

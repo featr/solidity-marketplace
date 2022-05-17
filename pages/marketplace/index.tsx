@@ -1,4 +1,5 @@
 import { useAccount, useNetwork } from "@components/hooks/web3";
+import { ConnectButton } from "@components/ui/common";
 import { CourseCard, CourseList } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
 import { EthRates, WalletBar } from "@components/ui/web3";
@@ -22,7 +23,17 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
       </div>
 
       <CourseList courses={courses}>
-        {(course) => <CourseCard course={course} key={course.id} />}
+        {(course) => (
+          <CourseCard
+            course={course}
+            key={course.id}
+            Footer={() => (
+              <div className="mt-4">
+                <ConnectButton variant="lightPurple">Purchase</ConnectButton>
+              </div>
+            )}
+          />
+        )}
       </CourseList>
     </>
   );
