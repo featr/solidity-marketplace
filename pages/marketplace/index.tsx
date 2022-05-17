@@ -29,7 +29,7 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
             hasBeenInit: network.hasBeenInit,
           }}
         />
-        <EthRates ethPrice={eth.data} />
+        <EthRates ethPrice={eth.data} costPerItem={eth.perItem} />
       </div>
 
       <CourseList courses={courses}>
