@@ -19,9 +19,10 @@ export type SetupHooks = {
 };
 
 export const setupHooks = (
-  web3: Web3,
-  provider: MetaMaskInpageProvider
+  web3: Web3 | null,
+  provider: MetaMaskInpageProvider | null
 ): SetupHooks => {
+  console.log("setting up hooks");
   return {
     useAccount: createUseAccount(web3, provider),
     useNetwork: createNetworkHook(web3, provider),

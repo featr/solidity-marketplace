@@ -1,5 +1,5 @@
 import { useWeb3 } from "@components/providers";
-import { useAccount } from "@components/hooks/web3/useAccount";
+import { useAccount } from "@components/hooks/web3";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { ConnectButton } from "..";

@@ -29,7 +29,7 @@ const WalletBar = ({
             </div>
           </div>
           <div>
-            {!network.hasBeenInit && !network.isSupported && (
+            {network.hasBeenInit && !network.isSupported && (
               <div className="bg-red-400 p-4 rounded-lg">
                 <div>Connected to wrong Network</div>
                 <div>

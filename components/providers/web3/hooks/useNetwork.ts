@@ -46,7 +46,7 @@ export const handler = (
   return {
     network: {
       data,
-      hasBeenInit: !data && !error,
+      hasBeenInit: data || error,
       mutate,
       target: targetNetwork,
       isSupported: data === targetNetwork,

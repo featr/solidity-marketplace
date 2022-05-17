@@ -22,17 +22,14 @@ type Web3Api = {
   web3: Web3;
   contract: any;
   isLoading: boolean;
+  hooks: SetupHooks | null;
 };
 
 type TUseWeb3 = {
   isWeb3Loaded: boolean;
-  getHooks: () => SetupHooks;
+  // getHooks: () => SetupHooks;
   connect: () => void;
-  provider: MetaMaskInpageProvider;
-  web3: Web3;
-  contract: any;
-  isLoading: boolean;
-};
+} & Web3Api;
 const Web3Context = createContext(null);
 
 const Web3Provider = ({ children }: Props) => {
@@ -41,6 +38,7 @@ const Web3Provider = ({ children }: Props) => {
     web3: null,
     contract: null,
     isLoading: true,
+    hooks: setupHooks(null, null),
   });
   useEffect(() => {
     const loadProvider = async () => {
@@ -53,6 +51,7 @@ const Web3Provider = ({ children }: Props) => {
           web3,
           contract: null,
           isLoading: false,
+          hooks: setupHooks(web3, provider),
         });
       } else {
         setWeb3Api((prev) => ({
@@ -70,7 +69,6 @@ const Web3Provider = ({ children }: Props) => {
     return {
       ...web3Api,
       isWeb3Loaded: web3 != null,
-      getHooks: (): SetupHooks => setupHooks(web3, provider),
       connect: provider
         ? async () => {
             try {
@@ -103,8 +101,8 @@ export const useWeb3 = (): TUseWeb3 => {
 };
 
 export const useHooks = <T,>(cb: cbInterface<T>) => {
-  const { getHooks } = useWeb3();
-  return cb(getHooks());
+  const { hooks } = useWeb3();
+  return cb(hooks);
 };
 
 export default Web3Provider;
