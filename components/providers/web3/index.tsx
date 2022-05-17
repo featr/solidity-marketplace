@@ -8,11 +8,10 @@ import {
 } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { MetaMaskInpageProvider } from "@metamask/providers";
-
 import Web3 from "web3";
 import { provider } from "web3-core";
 import { SetupHooks, setupHooks } from "./hooks/setupHooks";
-import { TCreateUseAccountHookReturn } from "./hooks/useAccount";
+
 type Props = {
   children?: ReactNode;
 };
@@ -26,8 +25,7 @@ type Web3Api = {
 };
 
 type TUseWeb3 = {
-  isWeb3Loaded: boolean;
-  // getHooks: () => SetupHooks;
+  requireInstall: boolean;
   connect: () => void;
 } & Web3Api;
 const Web3Context = createContext(null);
@@ -65,10 +63,10 @@ const Web3Provider = ({ children }: Props) => {
   }, []);
 
   const _web3Api: TUseWeb3 = useMemo(() => {
-    const { web3, provider } = web3Api;
+    const { web3, provider, isLoading } = web3Api;
     return {
       ...web3Api,
-      isWeb3Loaded: web3 != null,
+      requireInstall: !isLoading && !web3,
       connect: provider
         ? async () => {
             try {

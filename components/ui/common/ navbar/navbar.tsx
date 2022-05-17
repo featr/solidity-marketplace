@@ -6,7 +6,7 @@ import { ConnectButton } from "..";
 import { useRouter } from "next/router";
 
 const Navbar = () => {
-  const { connect, isWeb3Loaded, isLoading } = useWeb3();
+  const { connect, isLoading, requireInstall } = useWeb3();
   const { account } = useAccount();
   const { data, isAdmin } = account;
   const { pathname } = useRouter();
@@ -14,14 +14,14 @@ const Navbar = () => {
     if (isLoading) {
       return <ConnectButton disabled>Loading...</ConnectButton>;
     }
-    if (isWeb3Loaded && data) {
+    if (data) {
       return (
         <ConnectButton className="cursor-default" hoverable={false}>
           Hi there {isAdmin && "Admin"}
         </ConnectButton>
       );
     }
-    if (isWeb3Loaded && !data) {
+    if (!requireInstall && !data) {
       return <ConnectButton onClick={connect}>Connect</ConnectButton>;
     }
     return (

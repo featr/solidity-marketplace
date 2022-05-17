@@ -1,3 +1,5 @@
+import { useWeb3 } from "@components/providers";
+
 const WalletBar = ({
   address,
   network,
@@ -10,6 +12,7 @@ const WalletBar = ({
     hasBeenInit: boolean;
   };
 }) => {
+  const { requireInstall } = useWeb3();
   return (
     <section className="text-white bg-indigo-600">
       <div className="p-8">
@@ -36,6 +39,11 @@ const WalletBar = ({
                   Connect to : {``}
                   <strong className="text-2xl">{network.target}</strong>
                 </div>
+              </div>
+            )}
+            {requireInstall && (
+              <div className="bg-yellow-400 p-4 rounded-lg">
+                Cannot connect to network. Please install Metamask.
               </div>
             )}
             {network.data && (
