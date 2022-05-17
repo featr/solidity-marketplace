@@ -2,12 +2,18 @@ import { useAccount, useNetwork } from "@components/hooks/web3";
 import { ConnectButton } from "@components/ui/common";
 import { CourseCard, CourseList } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
+import { OrderModal } from "@components/ui/order";
 import { EthRates, WalletBar } from "@components/ui/web3";
 import { CourseContent, getAllCourses } from "@content/courses/fetcher";
+import { useState } from "react";
 
 export default function Marketplace({ courses }: { courses: CourseContent[] }) {
+  const [selectedCourse, setSelectedCourse] = useState<null | CourseContent>(
+    null
+  );
   const { account } = useAccount();
   const { network } = useNetwork();
+
   return (
     <>
       <div className="py-4">
@@ -29,12 +35,23 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
             key={course.id}
             Footer={() => (
               <div className="mt-4">
-                <ConnectButton variant="lightPurple">Purchase</ConnectButton>
+                <ConnectButton
+                  onClick={() => setSelectedCourse(course)}
+                  variant="lightPurple"
+                >
+                  Purchase
+                </ConnectButton>
               </div>
             )}
           />
         )}
       </CourseList>
+      {selectedCourse && (
+        <OrderModal
+          course={selectedCourse}
+          onClose={() => setSelectedCourse(null)}
+        ></OrderModal>
+      )}
     </>
   );
 }
