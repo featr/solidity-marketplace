@@ -1,3 +1,4 @@
+import { useEthPrice } from "@components/hooks/useEthPrice";
 import { useAccount, useNetwork } from "@components/hooks/web3";
 import { ConnectButton } from "@components/ui/common";
 import { CourseCard, CourseList } from "@components/ui/course";
@@ -13,6 +14,8 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
   );
   const { account } = useAccount();
   const { network } = useNetwork();
+  const { eth } = useEthPrice();
+  console.log("ethdata", eth?.data);
 
   return (
     <>
@@ -26,6 +29,7 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
             hasBeenInit: network.hasBeenInit,
           }}
         />
+        <EthRates ethPrice={eth.data} />
       </div>
 
       <CourseList courses={courses}>
