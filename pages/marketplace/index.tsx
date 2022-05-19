@@ -15,7 +15,8 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
   const { account } = useAccount();
   const { network } = useNetwork();
   const { eth } = useEthPrice();
-  console.log("ethdata", eth?.data);
+
+  const canPurchaseCourse = !!(account.data && network.isSupported);
 
   return (
     <>
@@ -36,11 +37,13 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
         {(course) => (
           <CourseCard
             course={course}
+            disabled={!canPurchaseCourse}
             key={course.id}
             Footer={() => (
               <div className="mt-4">
                 <ConnectButton
                   onClick={() => setSelectedCourse(course)}
+                  disabled={!canPurchaseCourse}
                   variant="lightPurple"
                 >
                   Purchase
