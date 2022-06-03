@@ -16,3 +16,14 @@ export const useNetwork = (): TCreateUseNetworkHookReturn => {
 export const useAccount = (): TCreateUseAccountHookReturn => {
   return useHooks((hooks) => hooks?.useAccount)();
 };
+
+export const useWalletInfo = () => {
+  const { account } = useAccount();
+  const { network } = useNetwork();
+
+  return {
+    account,
+    network,
+    canPurchaseCourse: !!(account.data && network.isSupported),
+  };
+};

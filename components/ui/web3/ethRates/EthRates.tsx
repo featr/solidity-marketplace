@@ -1,15 +1,10 @@
-import { SWRResponse } from "swr";
 import Image from "next/image";
+import { useEthPrice } from "@components/hooks/useEthPrice";
 
-const EthRates = ({
-  ethPrice,
-  costPerItem,
-}: {
-  ethPrice: number;
-  costPerItem: string;
-}) => {
+const EthRates = () => {
+  const { eth } = useEthPrice();
   return (
-    <div className="grid grid-cols-4 mb-5">
+    <div className="grid grid-cols-4">
       <div className="flex flex-1 items-stretch text-center">
         <div className="p-10 border drop-shadow rounded-md">
           <div className="flex">
@@ -20,7 +15,7 @@ const EthRates = ({
               src="/small-eth.webp "
               alt="eth-logo"
             />
-            <span className="text-2xl font-bold"> = {ethPrice}$</span>
+            <span className="text-2xl font-bold"> = {eth.data}$</span>
           </div>
           <p className="text-xl text-gray-500">Current eth Price</p>
         </div>
@@ -28,7 +23,7 @@ const EthRates = ({
       <div className="flex flex-1 items-stretch text-center">
         <div className="p-10 border drop-shadow rounded-md">
           <div className="flex">
-            <span className="text-2xl font-bold">{costPerItem}</span>
+            <span className="text-2xl font-bold">{eth.perItem}</span>
             <Image
               layout="fixed"
               height={35}
