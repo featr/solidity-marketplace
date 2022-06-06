@@ -1,6 +1,8 @@
+import { ConnectButton, Message } from "@components/ui/common";
 import { OwnedCourseCard } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
+import React from "react";
 
 const OwnedCourses = () => {
   return (
@@ -9,7 +11,10 @@ const OwnedCourses = () => {
         <MarketHeader />
       </div>
       <section className="grid grid-cols-1">
-        <OwnedCourseCard />
+        <OwnedCourseCard>
+          <Message>Success</Message>
+          <ConnectButton>Watch the course</ConnectButton>
+        </OwnedCourseCard>
       </section>
     </>
   );
