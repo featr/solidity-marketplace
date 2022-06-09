@@ -30,6 +30,9 @@
       ],
       "@content/*": [
         "content/*"
+      ],
+      "@utils/*": [
+        "utils/*"
       ]
     },
     "incremental": true

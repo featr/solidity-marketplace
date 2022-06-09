@@ -2,7 +2,6 @@ import { useWeb3 } from "@components/providers";
 import { Hero, Breadcrumbs } from "@components/ui/common";
 import { CourseList, CourseCard } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
-import { OrderCard } from "@components/ui/order";
 import { EthRates, WalletBar } from "@components/ui/web3";
 import { CourseContent, getAllCourses } from "@content/courses/fetcher";
 

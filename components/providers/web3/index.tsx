@@ -11,6 +11,7 @@ import { MetaMaskInpageProvider } from "@metamask/providers";
 import Web3 from "web3";
 import { provider } from "web3-core";
 import { SetupHooks, setupHooks } from "./hooks/setupHooks";
+import { loadContract } from "@utils/loadContract";
 
 type Props = {
   children?: ReactNode;
@@ -43,11 +44,12 @@ const Web3Provider = ({ children }: Props) => {
       const provider = (await detectEthereumProvider()) as MetaMaskInpageProvider;
 
       if (provider) {
-        const web3 = new Web3(provider as provider);
+        const web3 = new Web3(provider as any);
+        const contract = await loadContract("CourseMarketplace", web3);
         setWeb3Api({
           provider,
           web3,
-          contract: null,
+          contract,
           isLoading: false,
           hooks: setupHooks(web3, provider),
         });

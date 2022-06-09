@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 type Props = {
   children?: ReactNode;
-  isOpen: boolean;
+  isOpen?: boolean;
 };
 
 const Modal = ({ isOpen, children }: Props) => {
