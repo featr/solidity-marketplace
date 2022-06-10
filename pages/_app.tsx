@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
   const Layout = Component.Layout ?? Noop;
   return (
     <Layout>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </Layout>
   );
 }

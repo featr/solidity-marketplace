@@ -16,7 +16,6 @@ export const handler = (web3: Web3, contract: Contract) => (
   courses: CourseContent[],
   account: AccountType
 ): TCreateUseOwnedCoursesHookReturn => {
-  console.log("Calling useownedcourses");
   const { data, ...rest } = useSWR(
     () =>
       web3 && contract && account ? `web3/ownedCourses/${account.data}` : null,
