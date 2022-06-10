@@ -1,6 +1,7 @@
 import { useHooks } from "@components/providers/web3";
 import { TCreateUseAccountHookReturn } from "@components/providers/web3/hooks/useAccount";
 import { TCreateUseNetworkHookReturn } from "@components/providers/web3/hooks/useNetwork";
+import { TCreateUseOwnedCoursesHookReturn } from "@components/providers/web3/hooks/useOwnedCourses";
 
 // const enhanceHook = (swrRes) => {
 //   return {
@@ -15,6 +16,10 @@ export const useNetwork = (): TCreateUseNetworkHookReturn => {
 
 export const useAccount = (): TCreateUseAccountHookReturn => {
   return useHooks((hooks) => hooks?.useAccount)();
+};
+
+export const useOwnedCourses = (): TCreateUseOwnedCoursesHookReturn => {
+  return useHooks((hooks) => hooks?.useOwnedCourses)();
 };
 
 export const useWalletInfo = () => {
