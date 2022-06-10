@@ -105,7 +105,7 @@ const Web3Provider = ({ children }: Props) => {
 };
 
 interface cbInterface<T> {
-  (hooks: SetupHooks): () => T;
+  (hooks: SetupHooks): (...args: any) => T;
 }
 
 export const useWeb3 = (): TUseWeb3 => {

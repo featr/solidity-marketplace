@@ -3,6 +3,7 @@ import { Contract } from "web3-eth-contract";
 
 import Web3 from "web3";
 import {
+  AccountType,
   handler as createUseAccount,
   TCreateUseAccountHookReturn,
 } from "./useAccount";
@@ -14,15 +15,15 @@ import {
   handler as createOwnedCoursesHook,
   TCreateUseOwnedCoursesHookReturn,
 } from "./useOwnedCourses";
-
-const DEFAULT_HOOKS = {
-  useAccount: () => {},
-};
+import { CourseContent } from "@content/courses/fetcher";
 
 export type SetupHooks = {
   useAccount: () => TCreateUseAccountHookReturn;
   useNetwork: () => TCreateUseNetworkHookReturn;
-  useOwnedCourses: () => TCreateUseOwnedCoursesHookReturn;
+  useOwnedCourses: (
+    courses: CourseContent[],
+    account: AccountType
+  ) => TCreateUseOwnedCoursesHookReturn;
 };
 
 export const setupHooks = (
@@ -30,7 +31,7 @@ export const setupHooks = (
   provider: MetaMaskInpageProvider | null,
   contract?: Contract | null
 ): SetupHooks => {
-  console.log("setting up hooks");
+  // console.log("setting up hooks");
   return {
     useAccount: createUseAccount(web3, provider),
     useNetwork: createNetworkHook(web3, provider),

@@ -184,7 +184,7 @@ export default function OrderModal({
                     checked={hasAgreedTOS}
                     onChange={({ target }) => {
                       const { checked } = target;
-                      console.log("checked", checked);
+                      // console.log("checked", checked);
                       setHasAgreedTOS(checked);
                     }}
                   />

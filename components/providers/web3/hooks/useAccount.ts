@@ -7,7 +7,7 @@ const adminAdresses = {
   "0x5c964aa0bb889c6028c526eacbd34e3618025006be54bb82fad703edf0fd87b0": true,
 };
 
-interface AccountType extends SWRResponse<string, any> {
+export interface AccountType extends SWRResponse<string, any> {
   isAdmin: boolean;
 }
 
