@@ -190,9 +190,9 @@ export default function OrderModal({
                   />
                 </label>
                 <span>
-                  I accept Eincode &apos;terms of service&apos; and I agree that
-                  my order can be rejected in the case data provided above are
-                  not correct
+                  I accept featr&apos;s &apos;terms of service&apos; and I agree
+                  that my order can be rejected in case the data provided above
+                  is not correct
                 </span>
               </div>
               {formState.message && (
