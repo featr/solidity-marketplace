@@ -11,9 +11,7 @@ const OwnedCourses = ({ courses }: { courses: CourseContent[] }) => {
   const { ownedCourses } = useOwnedCourses(courses, account);
   return (
     <>
-      <div className="py-4">
-        <MarketHeader />
-      </div>
+      <MarketHeader />
       <section className="grid grid-cols-1">
         {ownedCourses.data &&
           ownedCourses.data.map((course) => (
@@ -24,7 +22,7 @@ const OwnedCourses = ({ courses }: { courses: CourseContent[] }) => {
           ))}
       </section>
     </>
-  )
+  );
 };
 
 OwnedCourses.Layout = BaseLayout;
