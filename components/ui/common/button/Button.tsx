@@ -23,7 +23,7 @@ const ConnectButton = ({
   return (
     <button
       {...rest}
-      className={`xs:px-8 xs:py-3 border rounded-md text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed ${className} ${variants[variant]}`}
+      className={`xs:px-8 xs:py-3 p-2 border rounded-md text-base font-medium disabled:opacity-50 disabled:cursor-not-allowed ${className} ${variants[variant]}`}
     >
       {children}
     </button>

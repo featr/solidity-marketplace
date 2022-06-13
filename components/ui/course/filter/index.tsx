@@ -2,20 +2,20 @@ import { ConnectButton } from "@components/ui/common";
 
 const CourseFilter = () => {
   return (
-    <div className="flex items-center my-4">
+    <div className="flex items-center my-4 flex-col md:flex-row">
       <div className="flex mr-2 relative rounded-md">
         <input
           type="text"
           name="account"
           id="account"
-          className="w-96 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
+          className="w-62 xs:w-96 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
           placeholder="0x2341ab..."
         />
         <ConnectButton>Search</ConnectButton>
       </div>
       <div className="relative text-gray-700">
         <select
-          className="w-72 h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
+          className="w-52 xs:w-72 h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
           placeholder="Regular input"
         >
           <option>A regular sized select input</option>

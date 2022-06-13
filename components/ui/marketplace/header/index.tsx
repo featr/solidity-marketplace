@@ -12,12 +12,12 @@ const LINKS: BreadcrumbLink[] = [
     value: "Buy",
   },
   {
-    href: "/marketplace/courses/owned",
-    value: "My Courses",
+    href: "/marketplace/articles/owned",
+    value: "My Articles",
   },
   {
-    href: "/marketplace/courses/manage",
-    value: "Manage Courses",
+    href: "/marketplace/articles/manage",
+    value: "Manage Articles",
   },
 ];
 

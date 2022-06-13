@@ -56,7 +56,7 @@ const Web3Provider = ({ children }: Props) => {
 
       if (provider) {
         const web3 = new Web3(provider as any);
-        const contract = await loadContract("CourseMarketplace", web3);
+        const contract = await loadContract("ArticleMarketplace", web3);
         setWeb3Api(
           createWeb3State({
             web3,

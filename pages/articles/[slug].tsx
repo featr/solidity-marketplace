@@ -13,14 +13,14 @@ type ParamsSlug = {
 export default function Course({ course }: { course: CourseContent }) {
   return (
     <>
-      <CourseHero
+      {/* <CourseHero
         title={course.title}
         description={course.description}
         image={course.coverImage}
       />
       <Keypoints points={course.wsl} />
       <Curriculum locked={true} />
-      <Modal />
+      <Modal /> */}
     </>
   );
 }

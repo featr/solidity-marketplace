@@ -1,7 +1,7 @@
 import { CourseContent } from "@content/courses/fetcher";
 import Link from "next/link";
 import Image from "next/image";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 const CourseCard = ({
   course,
@@ -29,7 +29,7 @@ const CourseCard = ({
           <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
             {course.type}
           </div>
-          <Link href={`/courses/${course.slug}`}>
+          <Link href={`/articles/${course.slug}`}>
             <a className="h-12 block mt-1 text-sm sm:text-lg leading-tight font-medium text-black hover:underline">
               {course.title}
             </a>
