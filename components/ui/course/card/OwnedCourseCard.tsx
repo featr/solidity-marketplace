@@ -18,8 +18,8 @@ const OwnedCourseCard = ({ children, course }: Props) => {
 
   return (
     <div className="bg-white border shadow overflow-hidden sm:rounded-lg mb-3">
-      <div className="flex flex-col xs:flex-row h-full">
-        <div className="flex-1 h-full next-image-wrapper">
+      <div className="block sm:flex h-full">
+        <div className="h-72 flex-1 sm:h-full next-image-wrapper">
           <Image
             className="object-cover"
             src={course.coverImage}
@@ -33,7 +33,11 @@ const OwnedCourseCard = ({ children, course }: Props) => {
           <div className="px-4 py-5 sm:px-6">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
               <span className="mr-2">{course?.title}</span>
-              <span className={`text-xs text-${stateColor}-700 bg-${stateColor}-100 rounded-full p-2`}>{course.state}</span>
+              <span
+                className={`text-xs text-${stateColor}-700 bg-${stateColor}-100 rounded-full p-2`}
+              >
+                {course.state}
+              </span>
             </h3>
             <p className="mt-1 max-w-2xl text-sm text-gray-500">
               {course?.price} ETH
@@ -42,7 +46,7 @@ const OwnedCourseCard = ({ children, course }: Props) => {
 
           <div className="border-t border-gray-200">
             <dl>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-9 sm:gap-4 sm:px-6">
+              <div className="bg-gray-50 px-4 py-5 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">
                   Article ID
                 </dt>
@@ -50,9 +54,9 @@ const OwnedCourseCard = ({ children, course }: Props) => {
                   {course?.ownedCourseId}
                 </dd>
               </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-9 sm:gap-4 sm:px-6">
+              <div className="bg-white px-4 py-5  sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Proof</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-12 break-words">
                   {course?.proof}
                 </dd>
               </div>

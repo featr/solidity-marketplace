@@ -15,6 +15,10 @@ import {
   handler as createOwnedCoursesHook,
   TCreateUseOwnedCoursesHookReturn,
 } from "./useOwnedCourses";
+import {
+  handler as createOwnedCourseHook,
+  TCreateUseOwnedCourseHookReturn,
+} from "./useOwnedCourse";
 import { CourseContent } from "@content/courses/fetcher";
 
 export type SetupHooks = {
@@ -24,6 +28,10 @@ export type SetupHooks = {
     courses: CourseContent[],
     account: AccountType
   ) => TCreateUseOwnedCoursesHookReturn;
+  useOwnedCourse: (
+    course: CourseContent,
+    account: AccountType
+  ) => TCreateUseOwnedCourseHookReturn;
 };
 
 export const setupHooks = (
@@ -36,5 +44,6 @@ export const setupHooks = (
     useAccount: createUseAccount(web3, provider),
     useNetwork: createNetworkHook(web3, provider),
     useOwnedCourses: createOwnedCoursesHook(web3, contract),
+    useOwnedCourse: createOwnedCourseHook(web3, contract),
   };
 };
