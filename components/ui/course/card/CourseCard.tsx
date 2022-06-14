@@ -36,7 +36,7 @@ const CourseCard = ({
           </Link>
 
           <p className="mt-2 text-sm sm:text-base text-gray-500">
-            {course.description.substring(0, 70)}...
+            {course.previewText.substring(0, 70)}...
           </p>
           {Footer && Footer()}
         </div>

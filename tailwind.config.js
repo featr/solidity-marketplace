@@ -18,6 +18,9 @@ module.exports = {
         4: "4 4 0%",
         5: "5 5 0%",
       },
+      minHeight: {
+        16: "320px"
+      },
       maxWidth: {
         "8xl": "1920px",
       },

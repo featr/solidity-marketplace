@@ -17,14 +17,10 @@ export default function Course({ course }: { course: CourseContent }) {
   console.log("ownedCourse", ownedCourse);
   return (
     <>
-      {/* <CourseHero
-        title={course.title}
-        description={course.description}
-        image={course.coverImage}
-      />
-      <Keypoints points={course.wsl} />
-      <Curriculum locked={true} />
-      <Modal /> */}
+      <CourseHero {...course} hasAccess={!!ownedCourse.data} />
+      {/* <Keypoints points={course.wsl} />
+      <Curriculum locked={true} /> */}
+      <Modal />
     </>
   );
 }

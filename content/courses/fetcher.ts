@@ -4,7 +4,9 @@ export type CourseContent = {
   id: string;
   type: string;
   title: string;
-  description: string;
+  description?: string;
+  previewText: string;
+  fullTextParagraphs: string[];
   coverImage: string;
   author: string;
   link: string;
@@ -20,7 +22,7 @@ export type GetCoursesReturnStruc = {
 
 export const getAllCourses = (): GetCoursesReturnStruc => {
   return {
-    data: courses,
+    data: courses as CourseContent[],
     courseMap: courses.reduce((a, c, i) => {
       a[c.id] = c;
       a[c.id].index = i;
