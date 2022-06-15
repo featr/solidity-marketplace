@@ -5,21 +5,59 @@ import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { CourseContent, getAllCourses } from "@content/courses/fetcher";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo } from "react";
+import Link from "next/link";
+import { useWeb3 } from "@components/providers";
 
 const OwnedCourses = ({ courses }: { courses: CourseContent[] }) => {
   const { account } = useAccount();
-  const router = useRouter()
+  const router = useRouter();
+  const { requireInstall } = useWeb3();
   const { ownedCourses } = useOwnedCourses(courses, account);
+  const isCoursesEmpty = useMemo(() => {
+    return ownedCourses.hasInitialResponse && ownedCourses?.data?.length === 0;
+  }, [ownedCourses]);
+  const isAccountEmpty = useMemo(() => {
+    return account.hasInitialResponse && !account.data;
+  }, [account]);
   return (
     <>
       <MarketHeader />
       <section className="grid grid-cols-1">
+        {isCoursesEmpty && (
+          <div>
+            <Message type="warning">
+              <div>You don&#39;t own any articles</div>
+              <Link href="/marketplace">
+                <a className="font-normal hover:underline">
+                  <i className="bg-yellow-100">Purchase Articles</i>
+                </a>
+              </Link>
+            </Message>
+          </div>
+        )}
+        {isAccountEmpty && (
+          <div>
+            <Message type="warning">
+              <div>Please connect to Metamask</div>
+            </Message>
+          </div>
+        )}
+        {requireInstall && (
+          <div>
+            <Message type="warning">
+              <div>Please install to Metamask</div>
+            </Message>
+          </div>
+        )}
         {ownedCourses.data &&
           ownedCourses.data.map((course) => (
             <OwnedCourseCard key={course.id} course={course}>
-              {/* <Message>Success</Message> */}
-              <ConnectButton onClick={() => router.push(`/articles/${course.slug}`)}>Read the article</ConnectButton>
+              <ConnectButton
+                onClick={() => router.push(`/articles/${course.slug}`)}
+              >
+                Read the article
+              </ConnectButton>
             </OwnedCourseCard>
           ))}
       </section>
