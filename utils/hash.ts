@@ -1,16 +1,10 @@
-import Web3 from "web3";
+import { ethers } from "ethers";
 
-export const createArticleHash = (web3: Web3) => (articleId, account) => {
-  const hexCourseId = web3.utils.utf8ToHex(articleId);
-  const courseHash = web3.utils.soliditySha3(
-    {
-      type: "bytes16",
-      value: hexCourseId,
-    },
-    {
-      type: "address",
-      value: account,
-    }
+export const createArticleHash = (articleId: string, account: string) => {
+  const hexCourseId = ethers.utils.id(articleId);
+  const courseHash = ethers.utils.solidityKeccak256(
+    ["bytes32", "address"],
+    [hexCourseId, account]
   );
   return courseHash;
 };

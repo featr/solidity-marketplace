@@ -1,21 +1,19 @@
-import Web3 from "web3";
-import { Contract } from "web3-eth-contract";
-const NETWORK_ID = process.env.NEXT_PUBLIC_NETWORK_ID;
+import { ethers } from "ethers";
+
+const CONTRACT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 
 export const loadContract = async (
   name: string,
-  web3: Web3
-): Promise<Contract> => {
-  const res = await fetch(`/contracts/${name}.json`);
+  signer: ethers.providers.JsonRpcSigner | ethers.providers.Web3Provider
+): Promise<ethers.Contract> => {
+  const res = await fetch(`/contracts/${name}.sol/${name}.json`);
   const Artifact = await res.json();
 
-  let contract: Contract | null = null;
+  let contract: ethers.Contract = null;
 
   try {
-    contract = new web3.eth.Contract(
-      Artifact.abi,
-      Artifact.networks[NETWORK_ID].address
-    );
+    contract = new ethers.Contract(CONTRACT_ADDRESS, Artifact.abi, signer);
+    const owner = await contract.getContractOwner();
   } catch (e) {
     console.log(`Contract ${name} cannot be loaded`, e);
   }

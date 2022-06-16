@@ -6,10 +6,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Contract } from "web3-eth-contract";
+import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
-import { MetaMaskInpageProvider } from "@metamask/providers";
-import Web3 from "web3";
 import { SetupHooks, setupHooks } from "./hooks/setupHooks";
 import { loadContract } from "@utils/loadContract";
 
@@ -18,9 +16,9 @@ type Props = {
 };
 
 type Web3Api = {
-  provider: MetaMaskInpageProvider;
-  web3: Web3;
-  contract: Contract | null;
+  provider: ethers.providers.Web3Provider;
+  signer: ethers.providers.JsonRpcSigner;
+  contract: ethers.Contract | null;
   isLoading: boolean;
   hooks: SetupHooks | null;
 };
@@ -31,36 +29,42 @@ type TUseWeb3 = {
 } & Web3Api;
 const Web3Context = createContext(null);
 
-const createWeb3State = ({ web3, provider, contract, isLoading }): Web3Api => {
+const createWeb3State = ({
+  provider,
+  contract,
+  isLoading,
+  signer,
+}): Web3Api => {
   return {
-    web3,
+    // web3,
     provider,
+    signer,
     contract,
     isLoading,
-    hooks: setupHooks(web3, provider, contract),
+    hooks: setupHooks(provider, contract),
   };
 };
 
 const Web3Provider = ({ children }: Props) => {
   const [web3Api, setWeb3Api] = useState<Web3Api>(
     createWeb3State({
-      web3: null,
       provider: null,
+      signer: null,
       contract: null,
       isLoading: true,
     })
   );
   useEffect(() => {
     const loadProvider = async () => {
-      const provider = (await detectEthereumProvider()) as MetaMaskInpageProvider;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
 
       if (provider) {
-        const web3 = new Web3(provider as any);
-        const contract = await loadContract("ArticleMarketplace", web3);
+        const signer = provider.getSigner();
+        const contract = await loadContract("ArticleMarketplace", signer);
         setWeb3Api(
           createWeb3State({
-            web3,
             provider,
+            signer,
             contract,
             isLoading: false,
           })
@@ -77,16 +81,14 @@ const Web3Provider = ({ children }: Props) => {
   }, []);
 
   const _web3Api: TUseWeb3 = useMemo(() => {
-    const { web3, provider, isLoading } = web3Api;
+    const { provider, isLoading } = web3Api;
     return {
       ...web3Api,
-      requireInstall: !isLoading && !web3,
+      requireInstall: !isLoading && !provider,
       connect: provider
         ? async () => {
             try {
-              await provider.request({
-                method: "eth_requestAccounts",
-              });
+              await provider.send("eth_requestAccounts", []);
             } catch {
               location.reload();
             }

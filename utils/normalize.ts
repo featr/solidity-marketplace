@@ -1,5 +1,5 @@
 import { CourseContent } from "@content/courses/fetcher";
-import Web3 from "web3";
+import { ethers } from "ethers";
 
 enum CourseStates {
   Purchased = "purchased",
@@ -21,16 +21,16 @@ export type normalizedOwnedCourse = CourseContent & {
   state: CourseStates;
 };
 
-export const normalizeOwnedCourse = (web3: Web3) => (
+export const normalizeOwnedCourse = (
   course,
   ownedCourse
 ): normalizedOwnedCourse => {
   return {
     ...course,
-    ownedCourseId: ownedCourse.id,
+    ownedCourseId: ownedCourse.id.toString(),
     proof: ownedCourse.proof,
     owner: ownedCourse.owner,
-    price: web3.utils.fromWei(ownedCourse.price),
+    price: ethers.utils.formatEther(ownedCourse.price.toString()).toString(),
     state: COURSE_STATES[ownedCourse.state],
   };
 };

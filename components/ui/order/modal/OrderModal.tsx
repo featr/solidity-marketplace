@@ -40,10 +40,12 @@ export default function OrderModal({
   course,
   onClose,
   onSubmit,
+  onSubmitLoading = false,
 }: {
   course: CourseContent;
   onClose: () => void;
   onSubmit: (order: typeof defaultOrder) => void;
+  onSubmitLoading: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [order, setOrder] = useState(defaultOrder);
@@ -205,7 +207,7 @@ export default function OrderModal({
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
           <ConnectButton
-            disabled={formState.isDisabled}
+            disabled={formState.isDisabled || onSubmitLoading}
             onClick={() => {
               onSubmit(order);
             }}

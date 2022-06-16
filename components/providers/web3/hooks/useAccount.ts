@@ -1,10 +1,9 @@
 import useSWR, { SWRResponse } from "swr";
 import { useEffect } from "react";
-import Web3 from "web3";
-import { MetaMaskInpageProvider } from "@metamask/providers";
+import { ethers } from "ethers";
 
 const adminAdresses = {
-  "0x5c964aa0bb889c6028c526eacbd34e3618025006be54bb82fad703edf0fd87b0": true,
+  "0xe9707d0e6171f728f7473c24cc0432a9b07eaaf1efed6a137a4a8c12c79552d9": true,
 };
 
 export interface AccountType extends SWRResponse<string, any> {
@@ -17,13 +16,12 @@ export type TCreateUseAccountHookReturn = {
 };
 
 export const handler = (
-  web3: Web3,
-  provider: MetaMaskInpageProvider
+  provider: ethers.providers.Web3Provider
 ) => (): TCreateUseAccountHookReturn => {
   const { mutate, data, error, ...rest } = useSWR(
-    () => (web3 ? "web3/accounts" : null),
+    () => (provider ? "web3/accounts" : null),
     async () => {
-      const accounts = await web3.eth.getAccounts();
+      const accounts = await provider.listAccounts();
       const account = accounts[0];
       if (!account) {
         throw new Error(
@@ -35,11 +33,14 @@ export const handler = (
   );
 
   useEffect(() => {
-    const mutator = (accounts) => mutate(accounts[0] ?? null);
-    provider?.on("accountsChanged", mutator);
+    const mutator = (accounts) => {
+      console.log("accounts changed");
+      mutate(accounts[0] ?? null);
+    };
+    (provider?.provider as any)?.on("accountsChanged", mutator);
 
     return () => {
-      provider?.removeListener("accountsChanged", mutator);
+      (provider?.provider as any)?.removeListener("accountsChanged", mutator);
     };
   }, [provider, mutate]);
 
@@ -47,8 +48,8 @@ export const handler = (
     account: {
       data,
       error,
-      isAdmin: (data && adminAdresses[web3.utils.keccak256(data)]) ?? false,
-      hasInitialResponse: data || error,
+      isAdmin: (data && adminAdresses[ethers.utils.keccak256(data)]) ?? false,
+      hasInitialResponse: !!(data || error),
       mutate,
       ...rest,
     },

@@ -1,7 +1,6 @@
 import useSWR, { SWRResponse } from "swr";
 import { useEffect } from "react";
-import Web3 from "web3";
-import { MetaMaskInpageProvider } from "@metamask/providers";
+import { ethers } from "ethers";
 
 const NETWORKS = {
   1: "Ethereum Main Network",
@@ -11,11 +10,12 @@ const NETWORKS = {
   42: "Kovan Test Network",
   56: "Binance Smart Chain",
   1337: "Ganache",
+  31337: "Hardhat",
 };
 
 const targetNetwork = NETWORKS[process.env.NEXT_PUBLIC_TARGET_CHAIN_ID];
 
-interface NetworkType extends SWRResponse<string, any> {
+export interface NetworkType extends SWRResponse<string, any> {
   target: string;
   isSupported: boolean;
   hasBeenInit: boolean;
@@ -26,13 +26,14 @@ export type TCreateUseNetworkHookReturn = {
 };
 
 export const handler = (
-  web3: Web3,
-  provider: MetaMaskInpageProvider
+  provider: ethers.providers.Web3Provider
 ) => (): TCreateUseNetworkHookReturn => {
   const { mutate, data, error, ...rest } = useSWR(
-    () => (web3 ? "web/network" : null),
+    () => (provider ? "web/network" : null),
     async () => {
-      const chainId = await web3.eth.getChainId();
+      const network = await provider.getNetwork();
+      const { chainId } = network;
+
       if (!chainId) {
         throw new Error("Cannot retrieve network. Please refresh the browser.");
       }
@@ -43,10 +44,10 @@ export const handler = (
   useEffect(() => {
     const mutator = (chainId) =>
       mutate(NETWORKS[parseInt(chainId as string, 16)]);
-    provider?.on("chainChanged", mutator);
+    (provider?.provider as any)?.on("chainChanged", mutator);
 
     return () => {
-      provider?.removeListener("chainChanged", mutator);
+      (provider?.provider as any)?.removeListener("chainChanged", mutator);
     };
   }, [provider, mutate]);
 
