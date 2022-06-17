@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useWalletInfo } from "@components/hooks/web3";
 import { useWeb3 } from "@components/providers";
 import { ConnectButton } from "@components/ui/common";
@@ -9,41 +10,39 @@ import { CourseContent, getAllCourses } from "@content/courses/fetcher";
 import { useState } from "react";
 
 export default function Marketplace({ courses }: { courses: CourseContent[] }) {
-  const { web3, contract } = useWeb3();
+  const { contract } = useWeb3();
   const { canPurchaseCourse, account } = useWalletInfo();
+  const [isPurchasing, setIsPurchasing] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<null | CourseContent>(
     null
   );
 
   const purchaseCourse = async (order) => {
-    const hexCourseId = web3.utils.utf8ToHex(selectedCourse.id);
+    const hexCourseId = ethers.utils.id(selectedCourse.id);
 
-    const courseHash = web3.utils.soliditySha3(
-      { type: "bytes16", value: hexCourseId },
-      { type: "address", value: account.data }
+    const courseHash = ethers.utils.solidityKeccak256(
+      ["bytes32", "string"],
+      [hexCourseId, account.data]
+    );
+    const emailHash = ethers.utils.id(order.email);
+
+    const proof = ethers.utils.solidityKeccak256(
+      ["bytes32", "bytes32"],
+      [emailHash, courseHash]
     );
 
-    const emailHash = web3.utils.sha3(order.email);
-
-    const proof = web3.utils.soliditySha3(
-      {
-        type: "bytes32",
-        value: emailHash,
-      },
-      {
-        type: "bytes32",
-        value: courseHash,
-      }
-    );
-
-    const coursePrice = web3.utils.toWei(order.price.toString());
+    const coursePrice = ethers.utils.parseEther(order.price.toString());
 
     try {
-      await contract.methods
-        .purchaseCourse(hexCourseId, proof)
-        .send({ from: account.data, value: coursePrice });
-    } catch {
-      console.log("Purchase course: Operation has failed.");
+      setIsPurchasing(true);
+      const tx = await contract.purchaseCourse(hexCourseId, proof, {
+        value: coursePrice,
+      });
+      await tx.wait();
+      setIsPurchasing(false);
+    } catch (e) {
+      setIsPurchasing(false);
+      console.log(e, "Purchase course: Operation has failed.");
     }
   };
 
@@ -72,6 +71,7 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
       </CourseList>
       {selectedCourse && (
         <OrderModal
+          onSubmitLoading={isPurchasing}
           course={selectedCourse}
           onClose={() => setSelectedCourse(null)}
           onSubmit={purchaseCourse}

@@ -1,7 +1,3 @@
-import { MetaMaskInpageProvider } from "@metamask/providers";
-import { Contract } from "web3-eth-contract";
-
-import Web3 from "web3";
 import {
   AccountType,
   handler as createUseAccount,
@@ -20,6 +16,7 @@ import {
   TCreateUseOwnedCourseHookReturn,
 } from "./useOwnedCourse";
 import { CourseContent } from "@content/courses/fetcher";
+import { ethers } from "ethers";
 
 export type SetupHooks = {
   useAccount: () => TCreateUseAccountHookReturn;
@@ -35,15 +32,13 @@ export type SetupHooks = {
 };
 
 export const setupHooks = (
-  web3: Web3 | null,
-  provider: MetaMaskInpageProvider | null,
-  contract?: Contract | null
+  provider: ethers.providers.Web3Provider | null,
+  contract?: ethers.Contract | null
 ): SetupHooks => {
-  // console.log("setting up hooks");
   return {
-    useAccount: createUseAccount(web3, provider),
-    useNetwork: createNetworkHook(web3, provider),
-    useOwnedCourses: createOwnedCoursesHook(web3, contract),
-    useOwnedCourse: createOwnedCourseHook(web3, contract),
+    useAccount: createUseAccount(provider),
+    useNetwork: createNetworkHook(provider),
+    useOwnedCourses: createOwnedCoursesHook(contract),
+    useOwnedCourse: createOwnedCourseHook(contract),
   };
 };

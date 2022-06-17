@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.8.0 <0.9.0;
+import "hardhat/console.sol";
 
 contract ArticleMarketplace {
     enum State {
@@ -46,9 +47,7 @@ contract ArticleMarketplace {
         _;
     }
 
-    // courseId - 0x00000000000000000000000000003130
-    // proof - 0x0000000000000000000000000000313000000000000000000000000000003130
-    function purchaseCourse(bytes16 courseId, bytes32 proof) external payable {
+    function purchaseCourse(bytes32 courseId, bytes32 proof) external payable {
         bytes32 courseHash = keccak256(abi.encodePacked(courseId, msg.sender));
 
         if (hasCourseOwnership(courseHash)) {

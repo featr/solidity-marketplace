@@ -130,26 +130,6 @@
     "createdAt": ""
   },
   {
-    "id": "",
-    "type": "Art",
-    "title": "Flutter vs React Native",
-    "previewText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec semper odio et elit commodo, at tincidunt nibh interdum. Pellentesque rutrum lacus nec massa aliquet aliquet. Vestibulum ut vehicula velit. Vivamus fermentum consequat volutpat. Maecenas vulputate quis nisi sed faucibus. Vivamus nec pulvinar erat, interdum vestibulum sem. Suspendisse dapibus nisl et urna egestas tincidunt. Vestibulum ullamcorper porta orci eget sodales. Duis pellentesque commodo dui vitae ultricies. Sed eu arcu dignissim, pharetra nunc vitae, elementum elit. Etiam fringilla lacus a laoreet malesuada",
-    "fullTextParagraphs": [
-      "Donec bibendum venenatis justo, eu consequat odio ultrices sed. Donec mattis sem ipsum, vitae ultrices mi semper et. Mauris massa tortor, aliquam varius pulvinar et, dictum ac lectus. Nam dictum mi nec sagittis faucibus. Vivamus auctor eget velit a viverra. Donec elementum pretium sem, quis malesuada augue fermentum eu. Phasellus nec quam enim. Duis non sem magna. Morbi vitae quam tempor, congue lorem in, scelerisque lorem. Duis fringilla augue eu pulvinar condimentum. Sed malesuada, justo eu malesuada hendrerit, velit lectus luctus mi, in laoreet augue dui sed est. Suspendisse id ipsum augue. Vestibulum varius, lacus ut tempus elementum, nunc enim egestas ligula, eu semper ante nisi eget leo.",
-      "Mauris libero justo, facilisis et urna et, finibus sollicitudin nibh. In blandit nibh velit, ac condimentum lacus rhoncus vitae. Quisque commodo finibus scelerisque. Sed iaculis ex ut facilisis viverra. Suspendisse potenti. Donec a varius sapien, et blandit diam. In iaculis erat vel leo mollis mattis. Integer sit amet lectus sit amet nulla cursus fringilla tincidunt quis est. Vivamus accumsan turpis eget elit interdum aliquam. Praesent in lacinia libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed laoreet massa vitae lobortis lobortis. Donec tincidunt condimentum leo, ac malesuada orci imperdiet at. In auctor eu orci id tempus. Aenean ornare urna sit amet tellus ullamcorper, vitae vestibulum turpis euismod.",
-      "Nullam eget fringilla quam. Nulla facilisi. Fusce aliquam leo est, ac eleifend libero pellentesque ac. Sed pretium hendrerit nisi, eget consequat tortor euismod a. Suspendisse laoreet tempor placerat. Praesent sodales justo consectetur bibendum semper. Vestibulum porttitor lacus eget sem faucibus mollis. Vestibulum lobortis nibh nec purus accumsan sagittis sit amet vel nibh. Donec massa sem, ornare quis gravida at, aliquam sit amet ligula. Praesent enim augue, dignissim sit amet tincidunt elementum, volutpat eu purus. Praesent condimentum nibh id tortor dapibus viverra. Nullam sagittis purus eu lobortis sagittis. Mauris dictum semper odio sed congue. Mauris risus ipsum, fermentum nec arcu at, blandit egestas massa. Vivamus sagittis viverra dui, luctus mattis leo fermentum eget.",
-      "Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse sollicitudin velit vel gravida semper. Phasellus eu ligula rutrum, egestas mauris ac, dignissim arcu. Integer at mollis enim. Nullam convallis elit erat, sed semper tellus maximus vel. Donec lobortis eros eget libero fermentum, a fermentum diam consequat. Nunc ligula quam, consequat eget scelerisque sed, scelerisque sit amet augue. Donec accumsan, erat a consequat feugiat, diam libero efficitur turpis, quis dictum tortor urna ut sapien."
-    ],
-    "coverImage": "https://cdn.pixabay.com/photo/2018/03/06/17/40/paper-3204064_960_720.jpg",
-    "author": "John Doe",
-    "slug": "vue-js-3-the-practical-guide",
-    "wsl": [
-      "Features explained on practical examples",
-      "Base and core concepts of Vue JS 3"
-    ],
-    "createdAt": ""
-  },
-  {
     "id": "847859",
     "type": "Gaming",
     "title": "Flutter vs React Native",

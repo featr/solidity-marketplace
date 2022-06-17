@@ -1,8 +1,8 @@
 import { CourseContent } from "@content/courses/fetcher";
 import { createArticleHash } from "@utils/hash";
 import { normalizedOwnedCourse, normalizeOwnedCourse } from "@utils/normalize";
+import { ethers } from "ethers";
 import useSWR, { SWRResponse } from "swr";
-import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { AccountType } from "./useAccount";
 
@@ -15,20 +15,19 @@ export type TCreateUseOwnedCourseHookReturn = {
   ownedCourse: OwnedCoursesType;
 };
 
-export const handler = (web3: Web3, contract: Contract) => (
+export const handler = (contract: ethers.Contract) => (
   course: CourseContent,
   account: AccountType
 ): TCreateUseOwnedCourseHookReturn => {
   const { data, error, ...rest } = useSWR(
-    () =>
-      web3 && contract && account ? `web3/ownedCourse/${account.data}` : null,
+    () => (contract && account ? `web3/ownedCourse/${account.data}` : null),
     async () => {
-      const courseHash = createArticleHash(web3)(course.id, account.data);
-      const ownedCourse = await contract.methods
-        .getCourseByHash(courseHash)
-        .call();
+      const courseHash = createArticleHash(course.id, account.data);
+
+      const ownedCourse = await contract.getCourseByHash(courseHash);
+
       if (ownedCourse.owner === account.data) {
-        return normalizeOwnedCourse(web3)(course, ownedCourse);
+        return normalizeOwnedCourse(course, ownedCourse);
       }
       return null;
     }
