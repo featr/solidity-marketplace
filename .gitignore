@@ -39,5 +39,5 @@ typechain
 #Hardhat files
 cache
 artifacts
-/public/build-info
 /public/contracts
+/public/build-info
