@@ -10,7 +10,7 @@ export const loadContract = async (
   const Artifact = await res.json();
 
   let contract: ethers.Contract = null;
-
+  // console.log("ABI", Artifact.abi);
   try {
     contract = new ethers.Contract(CONTRACT_ADDRESS, Artifact.abi, signer);
     const owner = await contract.getContractOwner();

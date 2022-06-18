@@ -17,6 +17,8 @@ contract ArticleMarketplace {
         State state; // 1
     }
 
+    bool public isPaused = false;
+
     // mapping of the courseHash to Course data
     mapping(bytes32 => Course) private ownedCourses;
 
@@ -39,6 +41,9 @@ contract ArticleMarketplace {
     /// Only owner can access this function!
     error OnlyOwner();
 
+    /// Contract is temporarily paused.
+    error ContractPaused();
+
     /// Only owner should have access to the function body!
     modifier onlyOwner() {
         if (msg.sender != getContractOwner()) {
@@ -47,7 +52,26 @@ contract ArticleMarketplace {
         _;
     }
 
-    function purchaseCourse(bytes32 courseId, bytes32 proof) external payable {
+    modifier onlyWhenNotPaused() {
+        if (isPaused) {
+            revert ContractPaused();
+        }
+        _;
+    }
+
+    function pauseContract() external onlyOwner {
+        isPaused = true;
+    }
+
+    function resumeContract() external onlyOwner {
+        isPaused = false;
+    }
+
+    function purchaseCourse(bytes32 courseId, bytes32 proof)
+        external
+        payable
+        onlyWhenNotPaused
+    {
         bytes32 courseHash = keccak256(abi.encodePacked(courseId, msg.sender));
 
         if (hasCourseOwnership(courseHash)) {
