@@ -1,5 +1,6 @@
 import { MockProvider } from "@ethereum-waffle/provider";
 import { BigNumber } from "@ethersproject/bignumber";
+import { BigNumber as BN } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { createArticleHash } from "../utils/hash";
 import { expect } from "chai";
@@ -46,6 +47,78 @@ describe("Marketplace Contract", function () {
   });
 
   describe("Transactions", function () {
+    describe("Direct Contract Transactions", function () {
+      let value: string;
+      let balanceBeforeTx: BigNumber;
+
+      // Reusable mock data for "Direct Contract Transactions" test suite
+      beforeEach(async function async() {
+        value = "1000000000000000000";
+        balanceBeforeTx = await articleMarketplace.getBalance();
+      });
+
+      it("should transfer funds to the contract", async function () {
+        await (await ethers.getSigner(addr1.address)).sendTransaction({
+          from: addr1.address,
+          to: articleMarketplace.address,
+          value,
+        });
+        const balanceAfterTx = await articleMarketplace.getBalance();
+        expect(balanceAfterTx).to.eq(balanceBeforeTx.add(BN.from(value)));
+      });
+
+      it("should be able to withdraw specified amount to specified address", async function () {
+        await (await ethers.getSigner(addr1.address)).sendTransaction({
+          from: addr1.address,
+          to: articleMarketplace.address,
+          value,
+        });
+        const contractBalanceAfterTx = await articleMarketplace.getBalance();
+        expect(contractBalanceAfterTx).to.eq(
+          balanceBeforeTx.add(BN.from(value))
+        );
+
+        const userBalanceBeforeWithdraw = await addr1.getBalance();
+
+        await articleMarketplace["withdrawMoneyTo(address,uint256)"](
+          addr1.address,
+          contractBalanceAfterTx
+        );
+        const contractBalanceAfterWithdraw = await articleMarketplace.getBalance();
+        const userBalanceAfterWithdraw = await addr1.getBalance();
+
+        expect(userBalanceAfterWithdraw).to.eq(
+          userBalanceBeforeWithdraw.add(contractBalanceAfterTx)
+        );
+        expect(contractBalanceAfterWithdraw.toNumber()).to.eq(0);
+      });
+
+      it("should not be able to withdraw if specifiedAmount > availableAmount", async function () {
+        await expect(
+          articleMarketplace["withdrawMoneyTo(address,uint256)"](
+            addr1.address,
+            BN.from(value)
+          )
+        ).to.be.revertedWith("InsufficientBalance");
+      });
+
+      it("should withdraw whole contract balance if no amount is specified", async function () {
+        await (await ethers.getSigner(addr1.address)).sendTransaction({
+          from: addr1.address,
+          to: articleMarketplace.address,
+          value,
+        });
+        let contractBalanceAfterTx = await articleMarketplace.getBalance();
+
+        expect(contractBalanceAfterTx).to.eq(
+          balanceBeforeTx.add(BN.from(value))
+        );
+
+        await articleMarketplace["withdrawMoneyTo(address)"](addr1.address);
+
+        expect((await articleMarketplace.getBalance()).toNumber()).to.eq(0);
+      });
+    });
     describe("Purchasing an Article", function () {
       let articleId: string;
       let email: string;

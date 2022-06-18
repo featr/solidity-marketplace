@@ -44,6 +44,15 @@ contract ArticleMarketplace {
     /// Contract is temporarily paused.
     error ContractPaused();
 
+    /// Contract is not paused.
+    error ContractNotPaused();
+
+    /// Transfer failed.
+    error TransferFailed();
+
+    /// Insufficient Balance
+    error InsufficientBalance();
+
     /// Only owner should have access to the function body!
     modifier onlyOwner() {
         if (msg.sender != getContractOwner()) {
@@ -59,12 +68,43 @@ contract ArticleMarketplace {
         _;
     }
 
+    modifier onlyWhenPaused() {
+        if (!isPaused) {
+            revert ContractNotPaused();
+        }
+        _;
+    }
+
+    receive() external payable {}
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function withdrawMoneyTo(address payable _to, uint256 amount)
+        public
+        onlyOwner
+    {
+        if (amount > getBalance()) {
+            revert InsufficientBalance();
+        }
+        _to.transfer(amount);
+    }
+
+    function withdrawMoneyTo(address payable _to) external onlyOwner {
+        withdrawMoneyTo(_to, getBalance());
+    }
+
     function pauseContract() external onlyOwner {
         isPaused = true;
     }
 
     function resumeContract() external onlyOwner {
         isPaused = false;
+    }
+
+    function selfDestruct() external onlyWhenPaused onlyOwner {
+        selfdestruct(owner);
     }
 
     function purchaseCourse(bytes32 courseId, bytes32 proof)
