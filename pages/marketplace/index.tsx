@@ -35,7 +35,7 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
 
     try {
       setIsPurchasing(true);
-      const tx = await contract.purchaseCourse(hexCourseId, proof, {
+      const tx = await contract.purchaseArticle(hexCourseId, proof, {
         value: coursePrice,
       });
       await tx.wait();

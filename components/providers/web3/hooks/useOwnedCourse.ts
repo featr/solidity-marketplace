@@ -24,7 +24,7 @@ export const handler = (contract: ethers.Contract) => (
     async () => {
       const courseHash = createArticleHash(course.id, account.data);
 
-      const ownedCourse = await contract.getCourseByHash(courseHash);
+      const ownedCourse = await contract.getArticleByHash(courseHash);
 
       if (ownedCourse.owner === account.data) {
         return normalizeOwnedCourse(course, ownedCourse);
