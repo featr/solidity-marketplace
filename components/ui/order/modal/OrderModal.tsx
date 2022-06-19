@@ -1,7 +1,8 @@
 import { useEthPrice } from "@components/hooks/useEthPrice";
-import { Modal, ConnectButton } from "@components/ui/common";
+import { Modal, ConnectButton, Message } from "@components/ui/common";
 import { CourseContent } from "@content/courses/fetcher";
-import { useEffect, useMemo, useState } from "react";
+import { TSubmitOrderInfo } from "@pages/marketplace";
+import React, { useEffect, useMemo, useState } from "react";
 
 const defaultOrder = {
   price: "",
@@ -40,12 +41,13 @@ export default function OrderModal({
   course,
   onClose,
   onSubmit,
-  onSubmitLoading = false,
+  onSubmitInfo,
 }: {
   course: CourseContent;
   onClose: () => void;
+  ƒ;
   onSubmit: (order: typeof defaultOrder) => void;
-  onSubmitLoading: boolean;
+  onSubmitInfo: TSubmitOrderInfo;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [order, setOrder] = useState(defaultOrder);
@@ -202,15 +204,19 @@ export default function OrderModal({
                   {formState.message}
                 </div>
               )}
+              {onSubmitInfo.error && (
+                <div className="p-4 my-3 text-yellow-700 bg-yellow-200 rounded-lg text-sm">
+                  Smething went wrong. Please try again and make sure you have
+                  not already purchased this course.
+                </div>
+              )}
             </div>
           </div>
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
           <ConnectButton
-            disabled={formState.isDisabled || onSubmitLoading}
-            onClick={() => {
-              onSubmit(order);
-            }}
+            disabled={formState.isDisabled || onSubmitInfo.loading}
+            onClick={() => onSubmit(order)}
           >
             Submit
           </ConnectButton>

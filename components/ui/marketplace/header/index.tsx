@@ -15,10 +15,10 @@ const LINKS: BreadcrumbLink[] = [
     href: "/marketplace/articles/owned",
     value: "My Articles",
   },
-  {
-    href: "/marketplace/articles/manage",
-    value: "Manage Articles",
-  },
+  // {
+  //   href: "/marketplace/articles/manage",
+  //   value: "Manage Articles",
+  // },
 ];
 
 const Header = () => {

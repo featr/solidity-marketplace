@@ -11,11 +11,20 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { createArticleHash } from "@utils/hash";
 
+export type TSubmitOrderInfo = {
+  loading: boolean;
+  error: boolean;
+};
+
 export default function Marketplace({ courses }: { courses: CourseContent[] }) {
   const { contract } = useWeb3();
   const { canPurchaseCourse, account } = useWalletInfo();
   const router = useRouter();
-  const [isPurchasing, setIsPurchasing] = useState(false);
+  // const [isPurchasing, setIsPurchasing] = useState(false);
+  const [orderInfo, setOrderInfo] = useState<TSubmitOrderInfo>({
+    loading: false,
+    error: false,
+  });
   const [selectedCourse, setSelectedCourse] = useState<null | CourseContent>(
     null
   );
@@ -34,16 +43,16 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
     const coursePrice = ethers.utils.parseEther(order.price.toString());
 
     try {
-      setIsPurchasing(true);
+      setOrderInfo((prev) => ({ ...prev, loading: true }));
       const tx = await contract.purchaseArticle(articleIdHash, proof, {
         value: coursePrice,
       });
       await tx.wait();
-      setIsPurchasing(false);
+      setOrderInfo({ error: false, loading: false });
       setSelectedCourse(null);
       router.push("/marketplace/articles/owned");
     } catch (e) {
-      setIsPurchasing(false);
+      setOrderInfo({ error: true, loading: false });
       console.log(e, "Purchase course: Operation has failed.");
     }
   };
@@ -73,11 +82,14 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
       </CourseList>
       {selectedCourse && (
         <OrderModal
-          onSubmitLoading={isPurchasing}
+          // onSubmitLoading={orderInfo.loading}
+          onSubmitInfo={orderInfo}
           course={selectedCourse}
-          onClose={() => setSelectedCourse(null)}
-          onSubmit={purchaseCourse}
-        ></OrderModal>
+          onClose={() => {
+            setSelectedCourse(null);
+            setOrderInfo({ loading: false, error: false });
+          } }
+          onSubmit={purchaseCourse} ƒ={undefined}        ></OrderModal>
       )}
     </>
   );

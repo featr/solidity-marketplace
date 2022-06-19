@@ -48,11 +48,11 @@ const Navbar = () => {
                   Marketplace
                 </a>
               </ActiveLink>
-              <ActiveLink href="/blogs">
+              {/* <ActiveLink href="/blogs">
                 <a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
                   Blogs
                 </a>
-              </ActiveLink>
+              </ActiveLink> */}
             </div>
             <div className="text-center">
               <ActiveLink href="/wishlist">
