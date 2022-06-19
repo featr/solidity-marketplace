@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-contract Owner {
+contract Owned {
     address payable internal owner;
 
     /// Only owner can access this function!

@@ -8,38 +8,40 @@ import { MarketHeader } from "@components/ui/marketplace";
 import { OrderModal } from "@components/ui/order";
 import { CourseContent, getAllCourses } from "@content/courses/fetcher";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { createArticleHash } from "@utils/hash";
 
 export default function Marketplace({ courses }: { courses: CourseContent[] }) {
   const { contract } = useWeb3();
   const { canPurchaseCourse, account } = useWalletInfo();
+  const router = useRouter();
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<null | CourseContent>(
     null
   );
 
   const purchaseCourse = async (order) => {
-    const hexCourseId = ethers.utils.id(selectedCourse.id);
+    const articleIdHash = ethers.utils.id(selectedCourse.id);
 
-    const courseHash = ethers.utils.solidityKeccak256(
-      ["bytes32", "string"],
-      [hexCourseId, account.data]
-    );
+    const articleHash = createArticleHash(selectedCourse.id, account.data);
     const emailHash = ethers.utils.id(order.email);
 
     const proof = ethers.utils.solidityKeccak256(
       ["bytes32", "bytes32"],
-      [emailHash, courseHash]
+      [emailHash, articleHash]
     );
 
     const coursePrice = ethers.utils.parseEther(order.price.toString());
 
     try {
       setIsPurchasing(true);
-      const tx = await contract.purchaseArticle(hexCourseId, proof, {
+      const tx = await contract.purchaseArticle(articleIdHash, proof, {
         value: coursePrice,
       });
       await tx.wait();
       setIsPurchasing(false);
+      setSelectedCourse(null);
+      router.push("/marketplace/articles/owned");
     } catch (e) {
       setIsPurchasing(false);
       console.log(e, "Purchase course: Operation has failed.");

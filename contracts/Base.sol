@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
-import "./Owner.sol";
+import "./Owned.sol";
 
-contract Base is Owner {
+contract Base is Owned {
     bool public isPaused = false;
     /// Contract is temporarily paused.
     error ContractPaused();
