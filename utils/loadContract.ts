@@ -9,11 +9,16 @@ export const loadContract = async (
   const res = await fetch(`/contracts/${name}.sol/${name}.json`);
   const Artifact = await res.json();
 
+  console.log("Artifact", Artifact)
+
   let contract: ethers.Contract = null;
   // console.log("ABI", Artifact.abi);
   try {
     contract = new ethers.Contract(CONTRACT_ADDRESS, Artifact.abi, signer);
-    const owner = await contract.getContractOwner();
+    console.log("contract", contract)
+    const contractOwner = await contract.getArticleCount();
+    console.log("contractOwenr", contractOwner)
+    // const owner = await contract.getContractOwner();
   } catch (e) {
     console.log(`Contract ${name} cannot be loaded`, e);
   }

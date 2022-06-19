@@ -151,7 +151,7 @@ describe("Marketplace Contract", function () {
       it("Should update contract balance when an article is purchased", async function () {
         await articleMarketplace
           .connect(addr1)
-          .purchaseCourse(articleIdHash, proof, {
+          .purchaseArticle(articleIdHash, proof, {
             value: articlePrice,
           });
 
@@ -165,13 +165,13 @@ describe("Marketplace Contract", function () {
       it("Should store the correct values for the purchase in the contract mapping", async function () {
         await articleMarketplace
           .connect(addr1)
-          .purchaseCourse(articleIdHash, proof, {
+          .purchaseArticle(articleIdHash, proof, {
             value: articlePrice,
           });
 
         const article = await articleMarketplace
           .connect(addr1)
-          .getCourseByHash(articleHash);
+          .getArticleByHash(articleHash);
 
         expect(article.state).to.eq(0);
         expect(article.proof).to.eq(proof);
@@ -182,17 +182,17 @@ describe("Marketplace Contract", function () {
       it("Should revert tx when trying to purchase the same article > 1", async function () {
         await articleMarketplace
           .connect(addr1)
-          .purchaseCourse(articleIdHash, proof, {
+          .purchaseArticle(articleIdHash, proof, {
             value: articlePrice,
           });
 
         await expect(
           articleMarketplace
             .connect(addr1)
-            .purchaseCourse(articleIdHash, proof, {
+            .purchaseArticle(articleIdHash, proof, {
               value: articlePrice,
             })
-        ).to.be.revertedWith(`CourseHasOwner`);
+        ).to.be.revertedWith(`ArticleAlreadyPurchased`);
       });
     });
   });

@@ -30,7 +30,7 @@ export const handler = (contract: ethers.Contract) => (
 
         const courseHash = createArticleHash(course.id, account.data);
 
-        const ownedCourse = await contract.getCourseByHash(courseHash);
+        const ownedCourse = await contract.getArticleByHash(courseHash);
 
         if (ownedCourse.owner === account.data) {
           const normalized = normalizeOwnedCourse(course, ownedCourse);
