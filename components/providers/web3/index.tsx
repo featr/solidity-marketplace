@@ -10,15 +10,26 @@ import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { SetupHooks, setupHooks } from "./hooks/setupHooks";
 import { loadContract } from "@utils/loadContract";
+import { ArticleMarketplace } from "typechain";
+import { PassMinter } from "typechain/PassMinter";
 
 type Props = {
   children?: ReactNode;
 };
 
+export interface IGenericContract<T> extends ethers.Contract {
+  // T
+}
+
+export type TContracts = {
+  articleMarketplaceContract?: ArticleMarketplace;
+  passMinterContract?: PassMinter;
+};
+
 type Web3Api = {
   provider: ethers.providers.Web3Provider;
   signer: ethers.providers.JsonRpcSigner;
-  contract: ethers.Contract | null;
+  contracts: TContracts;
   isLoading: boolean;
   hooks: SetupHooks | null;
 };
@@ -31,7 +42,7 @@ const Web3Context = createContext(null);
 
 const createWeb3State = ({
   provider,
-  contract,
+  contracts,
   isLoading,
   signer,
 }): Web3Api => {
@@ -39,9 +50,9 @@ const createWeb3State = ({
     // web3,
     provider,
     signer,
-    contract,
+    contracts,
     isLoading,
-    hooks: setupHooks(provider, contract),
+    hooks: setupHooks(provider, contracts),
   };
 };
 
@@ -50,7 +61,10 @@ const Web3Provider = ({ children }: Props) => {
     createWeb3State({
       provider: null,
       signer: null,
-      contract: null,
+      contracts: {
+        articleMarketplaceContract: null,
+        passMinterContract: null,
+      },
       isLoading: true,
     })
   );
@@ -60,12 +74,24 @@ const Web3Provider = ({ children }: Props) => {
 
       if (provider) {
         const signer = provider.getSigner();
-        const contract = await loadContract("ArticleMarketplace", signer);
+        const contracts: TContracts = {
+          articleMarketplaceContract: await loadContract<ArticleMarketplace>(
+            "ArticleMarketplace",
+            "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+            signer
+          ),
+          passMinterContract: await loadContract<PassMinter>(
+            "PassMinter",
+            "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+            signer
+          ),
+        };
+
         setWeb3Api(
           createWeb3State({
             provider,
             signer,
-            contract,
+            contracts,
             isLoading: false,
           })
         );

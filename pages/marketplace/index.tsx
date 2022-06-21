@@ -17,10 +17,11 @@ export type TSubmitOrderInfo = {
 };
 
 export default function Marketplace({ courses }: { courses: CourseContent[] }) {
-  const { contract } = useWeb3();
+  const {
+    contracts: { articleMarketplaceContract },
+  } = useWeb3();
   const { canPurchaseCourse, account } = useWalletInfo();
   const router = useRouter();
-  // const [isPurchasing, setIsPurchasing] = useState(false);
   const [orderInfo, setOrderInfo] = useState<TSubmitOrderInfo>({
     loading: false,
     error: false,
@@ -44,9 +45,13 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
 
     try {
       setOrderInfo((prev) => ({ ...prev, loading: true }));
-      const tx = await contract.purchaseArticle(articleIdHash, proof, {
-        value: coursePrice,
-      });
+      const tx = await articleMarketplaceContract.purchaseArticle(
+        articleIdHash,
+        proof,
+        {
+          value: coursePrice,
+        }
+      );
       await tx.wait();
       setOrderInfo({ error: false, loading: false });
       setSelectedCourse(null);
@@ -82,14 +87,15 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
       </CourseList>
       {selectedCourse && (
         <OrderModal
-          // onSubmitLoading={orderInfo.loading}
           onSubmitInfo={orderInfo}
           course={selectedCourse}
           onClose={() => {
             setSelectedCourse(null);
             setOrderInfo({ loading: false, error: false });
-          } }
-          onSubmit={purchaseCourse} ƒ={undefined}        ></OrderModal>
+          }}
+          onSubmit={purchaseCourse}
+          ƒ={undefined}
+        ></OrderModal>
       )}
     </>
   );

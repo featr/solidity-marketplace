@@ -41,3 +41,5 @@ cache
 artifacts
 /public/contracts
 /public/build-info
+/public/@openzeppelin/
+/public

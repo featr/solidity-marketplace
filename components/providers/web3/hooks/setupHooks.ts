@@ -17,6 +17,7 @@ import {
 } from "./useOwnedCourse";
 import { CourseContent } from "@content/courses/fetcher";
 import { ethers } from "ethers";
+import { TContracts } from "..";
 
 export type SetupHooks = {
   useAccount: () => TCreateUseAccountHookReturn;
@@ -33,12 +34,14 @@ export type SetupHooks = {
 
 export const setupHooks = (
   provider: ethers.providers.Web3Provider | null,
-  contract?: ethers.Contract | null
+  contracts?: TContracts
 ): SetupHooks => {
   return {
     useAccount: createUseAccount(provider),
     useNetwork: createNetworkHook(provider),
-    useOwnedCourses: createOwnedCoursesHook(contract),
-    useOwnedCourse: createOwnedCourseHook(contract),
+    useOwnedCourses: createOwnedCoursesHook(
+      contracts.articleMarketplaceContract
+    ),
+    useOwnedCourse: createOwnedCourseHook(contracts.articleMarketplaceContract),
   };
 };

@@ -21,7 +21,13 @@ async function main() {
 
   await articleMarketplace.deployed();
 
+  const PassMinter = await ethers.getContractFactory("PassMinter");
+  const passMinter = await PassMinter.deploy();
+
+  await passMinter.deployed();
+
   console.log("ArticleMarketplace deployed to:", articleMarketplace.address);
+  console.log("PassMinter deployed to:", passMinter.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -1,27 +1,24 @@
+import { IGenericContract } from "@components/providers/web3";
 import { ethers } from "ethers";
 
-const CONTRACT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+// const CONTRACT_ADDRESS = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 
-export const loadContract = async (
+export const loadContract = async <T extends ethers.Contract>(
   name: string,
+  contractAddress: string,
   signer: ethers.providers.JsonRpcSigner | ethers.providers.Web3Provider
-): Promise<ethers.Contract> => {
+): Promise<T> => {
   const res = await fetch(`/contracts/${name}.sol/${name}.json`);
   const Artifact = await res.json();
 
-  console.log("Artifact", Artifact)
+  console.log("Artifact", Artifact);
 
-  let contract: ethers.Contract = null;
-  // console.log("ABI", Artifact.abi);
+  let contract: IGenericContract<T> = null;
   try {
-    contract = new ethers.Contract(CONTRACT_ADDRESS, Artifact.abi, signer);
-    console.log("contract", contract)
-    const contractOwner = await contract.getArticleCount();
-    console.log("contractOwenr", contractOwner)
-    // const owner = await contract.getContractOwner();
+    contract = new ethers.Contract(contractAddress, Artifact.abi, signer);
   } catch (e) {
     console.log(`Contract ${name} cannot be loaded`, e);
   }
 
-  return contract;
+  return contract as T;
 };

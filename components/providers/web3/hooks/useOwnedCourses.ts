@@ -1,8 +1,8 @@
 import { CourseContent } from "@content/courses/fetcher";
 import { createArticleHash } from "@utils/hash";
 import { normalizedOwnedCourse, normalizeOwnedCourse } from "@utils/normalize";
-import { ethers } from "ethers";
 import useSWR, { SWRResponse } from "swr";
+import { ArticleMarketplace } from "typechain";
 import { AccountType } from "./useAccount";
 export interface OwnedCoursesType
   extends SWRResponse<normalizedOwnedCourse[], any> {
@@ -13,7 +13,7 @@ export type TCreateUseOwnedCoursesHookReturn = {
   ownedCourses: OwnedCoursesType;
 };
 
-export const handler = (contract: ethers.Contract) => (
+export const handler = (contract: ArticleMarketplace) => (
   courses: CourseContent[],
   account: AccountType
 ): TCreateUseOwnedCoursesHookReturn => {
