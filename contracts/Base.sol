@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 import "./Owned.sol";
 
-contract Base is Owned {
+contract Base is Owned() {
     bool public isPaused = false;
     /// Contract is temporarily paused.
     error ContractPaused();

@@ -1,11 +1,15 @@
 import { useWalletInfo } from "@components/hooks/web3";
 import { useWeb3 } from "@components/providers";
 import { ConnectButton } from "@components/ui/common";
+import { ethers } from "ethers";
 
 const WalletBar = () => {
   const { account, network } = useWalletInfo();
-
-  const { requireInstall } = useWeb3();
+  // console.log
+  const {
+    requireInstall,
+    contracts: { passMinterContract },
+  } = useWeb3();
   return (
     <section className="text-white bg-indigo-600 rounded-lg">
       <div className="p-8">
@@ -17,7 +21,26 @@ const WalletBar = () => {
         </h2>
         <div className="flex justify-between items-center">
           <div className="sm:flex sm:justify-center lg:justify-start">
-            <ConnectButton variant="white" className="mr-2 text-sm xs:text-lg p-2">Learn how to purchase</ConnectButton>
+            <ConnectButton
+              variant="white"
+              className="mr-2 text-sm xs:text-lg p-2"
+              onClick={async () => {
+                try {
+                  const minterTested = await passMinterContract.mintNFT(
+                    process.env.NEXT_PUBLIC_NFT_URl,
+                    {
+                      value: ethers.utils.parseEther("0.5"),
+                    }
+                  );
+                  await minterTested.wait();
+                } catch (e) {
+                  console.log("coudlnt fetch minter", e);
+                }
+              }}
+            >
+              Buy Reading Pass
+            </ConnectButton>
+
             {/* <div className="rounded-md shadow">
               <a
                 href="#"

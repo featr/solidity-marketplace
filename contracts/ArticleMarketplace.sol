@@ -29,6 +29,9 @@ contract ArticleMarketplace is Base {
     /// Article has already been purchased!
     error ArticleAlreadyPurchased();
 
+    /// You have provided wrong transaction amount.
+    error WrongTransactionAmount();
+
     receive() external payable {}
 
     function purchaseArticle(bytes32 articleId, bytes32 proof)
@@ -36,6 +39,10 @@ contract ArticleMarketplace is Base {
         payable
         onlyWhenNotPaused
     {
+        if (msg.value != 0.05 ether) {
+            revert WrongTransactionAmount();
+        }
+
         bytes32 articleHash = keccak256(
             abi.encodePacked(articleId, msg.sender)
         );

@@ -7,6 +7,7 @@ import { TCreateUseNetworkHookReturn } from "@components/providers/web3/hooks/us
 import { TCreateUseOwnedCourseHookReturn } from "@components/providers/web3/hooks/useOwnedCourse";
 import { TCreateUseOwnedCoursesHookReturn } from "@components/providers/web3/hooks/useOwnedCourses";
 import { CourseContent } from "@content/courses/fetcher";
+import { useEffect } from "react";
 import { SWRResponse } from "swr";
 
 // type GT<R> = SWRResponse<string, any> & TCreateUseOwnedCourseHookReturn;
