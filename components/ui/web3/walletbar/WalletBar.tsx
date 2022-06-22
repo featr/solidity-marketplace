@@ -1,6 +1,7 @@
 import { useWalletInfo } from "@components/hooks/web3";
 import { useWeb3 } from "@components/providers";
 import { ConnectButton } from "@components/ui/common";
+import { ethers } from "ethers";
 
 const WalletBar = () => {
   const { account, network } = useWalletInfo();
@@ -26,7 +27,10 @@ const WalletBar = () => {
               onClick={async () => {
                 try {
                   const minterTested = await passMinterContract.mintNFT(
-                    process.env.NEXT_PUBLIC_NFT_URl
+                    process.env.NEXT_PUBLIC_NFT_URl,
+                    {
+                      value: ethers.utils.parseEther("0.5"),
+                    }
                   );
                   await minterTested.wait();
                 } catch (e) {

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useEthPrice } from "@components/hooks/useEthPrice";
 import { ConnectButton, Loader } from "@components/ui/common";
 import { useWeb3 } from "@components/providers";
+import { ethers } from "ethers";
 
 const EthRates = () => {
   const { eth } = useEthPrice();
@@ -14,6 +15,9 @@ const EthRates = () => {
     try {
       const minterTested = await passMinterContract.mintNFT(
         process.env.NEXT_PUBLIC_NFT_URl,
+        {
+          value: ethers.utils.parseEther("0.5"),
+        }
       );
       await minterTested.wait();
     } catch (e) {
