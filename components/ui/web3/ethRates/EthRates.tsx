@@ -1,12 +1,27 @@
 import Image from "next/image";
-import { COURSE_PRICE, useEthPrice } from "@components/hooks/useEthPrice";
-import { Loader } from "@components/ui/common";
+import { useEthPrice } from "@components/hooks/useEthPrice";
+import { ConnectButton, Loader } from "@components/ui/common";
+import { useWeb3 } from "@components/providers";
 
 const EthRates = () => {
   const { eth } = useEthPrice();
+  const {
+    contracts: { passMinterContract },
+    hasLifetimeAccess,
+  } = useWeb3();
+
+  const purchaseLifetimeAccess = async () => {
+    try {
+      const minterTested = await passMinterContract.mintNFT(
+        process.env.NEXT_PUBLIC_NFT_URl,
+      );
+      await minterTested.wait();
+    } catch (e) {
+      console.log("coudlnt fetch minter", e);
+    }
+  };
   return (
     <div className="flex flex-col xs:flex-row text-center">
-      {/* <div className="flex flex-1 items-stretch text-center"> */}
       <div className="p-6 border drop-shadow rounded-md xs:mr-2">
         <div className="flex items-center justify-center">
           {eth.data ? (
@@ -28,13 +43,10 @@ const EthRates = () => {
         </div>
         <p className="text-lg text-gray-500">Current eth Price</p>
       </div>
-      {/* </div> */}
-      {/* <div className="flex flex-1 items-stretch text-center"> */}
-      <div className="p-6 border drop-shadow rounded-md">
-        <div className="flex items-center justify-center">
+      <div className="p-6 border drop-shadow rounded-md xs:mr-2">
+        <div className="flex items-center justify-center mr-3">
           {eth.data ? (
             <>
-              <span className="text-xl font-bold">{eth.perItem}</span>
               <Image
                 layout="fixed"
                 height={35}
@@ -42,7 +54,7 @@ const EthRates = () => {
                 src="/small-eth.webp "
                 alt="eth-logo"
               />
-              <span className="text-xl font-bold">= {COURSE_PRICE}$</span>
+              <span className="text-xl font-bold">0.05</span>
             </>
           ) : (
             <div className="w-full flex justify-center">
@@ -50,9 +62,31 @@ const EthRates = () => {
             </div>
           )}
         </div>
-        <p className="text-lg text-gray-500">Price per course</p>
+        <p className="text-lg text-gray-500">Price per article</p>
       </div>
-      {/* </div> */}
+      {!hasLifetimeAccess && (
+        <ConnectButton variant="lightPurple" onClick={purchaseLifetimeAccess}>
+          <div className="flex items-center justify-center mr-3">
+            {eth.data ? (
+              <>
+                <Image
+                  layout="fixed"
+                  height={35}
+                  width={35}
+                  src="/small-eth.webp "
+                  alt="eth-logo"
+                />
+                <span className="text-xl font-bold">0.5</span>
+              </>
+            ) : (
+              <div className="w-full flex justify-center">
+                <Loader size="md" />
+              </div>
+            )}
+          </div>
+          <p>Lifetime Access</p>
+        </ConnectButton>
+      )}
     </div>
   );
 };

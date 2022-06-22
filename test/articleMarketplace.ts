@@ -133,7 +133,7 @@ describe("Marketplace Contract", function () {
       beforeEach(function () {
         articleId = "111021";
         email = "test@abv.bg";
-        price = 0.015;
+        price = 0.05;
 
         articleIdHash = ethers.utils.id(articleId);
         emailHash = ethers.utils.id(email);
@@ -160,6 +160,16 @@ describe("Marketplace Contract", function () {
             articlePrice
           )
         );
+      });
+
+      it("Should revert transaction if value send is lower than 0.05eth", async function () {
+        await expect(
+          articleMarketplace
+            .connect(addr1)
+            .purchaseArticle(articleIdHash, proof, {
+              value: ethers.utils.parseEther("0.02"),
+            })
+        ).to.be.revertedWith("WrongTransactionAmount");
       });
 
       it("Should store the correct values for the purchase in the contract mapping", async function () {

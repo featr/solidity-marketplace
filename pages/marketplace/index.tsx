@@ -41,7 +41,7 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
       [emailHash, articleHash]
     );
 
-    const coursePrice = ethers.utils.parseEther(order.price.toString());
+    const coursePrice = ethers.utils.parseEther("0.05");
 
     try {
       setOrderInfo((prev) => ({ ...prev, loading: true }));

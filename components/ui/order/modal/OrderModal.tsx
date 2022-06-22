@@ -21,13 +21,9 @@ const _createFormState = (isDisabled = false, message = ""): TFormReturn => ({
 });
 
 const createFormState = (
-  { price, email, confirmationEmail }: typeof defaultOrder,
+  { email, confirmationEmail }: typeof defaultOrder,
   hasAgreedTOS
 ): TFormReturn => {
-  if (!price || Number(price) <= 0) {
-    return _createFormState(true, "Price is not valid.");
-  }
-
   if (email !== confirmationEmail) {
     return _createFormState(true, "Emails are not matching.");
   }
@@ -51,16 +47,13 @@ export default function OrderModal({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [order, setOrder] = useState(defaultOrder);
-  const [enablePrice, setEnablePrice] = useState(false);
   const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
-  const { eth } = useEthPrice();
 
   useEffect(() => {
     if (course) {
       setIsOpen(true);
       setOrder({
         ...defaultOrder,
-        price: eth.perItem,
       });
     }
   }, [course]);
@@ -68,7 +61,6 @@ export default function OrderModal({
   const closeModal = () => {
     setIsOpen(false);
     setOrder(defaultOrder);
-    setEnablePrice(false);
     setHasAgreedTOS(false);
     onClose();
   };
@@ -89,54 +81,7 @@ export default function OrderModal({
               >
                 {course?.title}
               </h3>
-              <div className="mt-1 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Price(eth)</label>
-                  <div className="text-xs text-gray-700 flex">
-                    <label className="flex items-center mr-2">
-                      <input
-                        type="checkbox"
-                        className="form-checkbox"
-                        checked={enablePrice}
-                        onChange={({ target }) => {
-                          const { checked } = target;
-                          setOrder({
-                            ...order,
-                            price: checked ? order.price : eth.perItem,
-                          });
-                          setEnablePrice(checked);
-                        }}
-                      />
-                    </label>
-                    <span>
-                      Adjust Price - only when the price is not correct
-                    </span>
-                  </div>
-                </div>
-                <input
-                  value={order.price}
-                  disabled={!enablePrice}
-                  onChange={({ target }) => {
-                    const { value } = target;
-                    if (isNaN(+value)) {
-                      return;
-                    }
-                    setOrder({
-                      ...order,
-                      price: value,
-                    });
-                  }}
-                  type="text"
-                  name="price"
-                  id="price"
-                  className="disabled:opacity-50 w-80 mb-1 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                />
-                <p className="text-xs text-gray-700">
-                  Price will be verified at the time of the order. If the price
-                  will be lower, order can be declined (+- 2% slipage is
-                  allowed)
-                </p>
-              </div>
+
               <div className="mt-2 relative rounded-md">
                 <div className="mb-1">
                   <label className="mb-2 font-bold">Email</label>

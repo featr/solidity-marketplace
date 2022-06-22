@@ -10,7 +10,7 @@ import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { SetupHooks, setupHooks } from "./hooks/setupHooks";
 import { loadContract } from "@utils/loadContract";
-import { ArticleMarketplace } from "typechain";
+import { ArticleMarketplace, ERC721 } from "typechain";
 import { PassMinter } from "typechain/PassMinter";
 
 type Props = {
@@ -32,6 +32,7 @@ type Web3Api = {
   contracts: TContracts;
   isLoading: boolean;
   hooks: SetupHooks | null;
+  hasLifetimeAccess?: boolean;
 };
 
 type TUseWeb3 = {
@@ -45,6 +46,7 @@ const createWeb3State = ({
   contracts,
   isLoading,
   signer,
+  hasLifetimeAccess,
 }): Web3Api => {
   return {
     // web3,
@@ -53,6 +55,7 @@ const createWeb3State = ({
     contracts,
     isLoading,
     hooks: setupHooks(provider, contracts),
+    hasLifetimeAccess,
   };
 };
 
@@ -66,6 +69,7 @@ const Web3Provider = ({ children }: Props) => {
         passMinterContract: null,
       },
       isLoading: true,
+      hasLifetimeAccess: false,
     })
   );
   useEffect(() => {
@@ -75,7 +79,9 @@ const Web3Provider = ({ children }: Props) => {
       if (provider) {
         const signer = provider.getSigner();
         const contracts: TContracts = {
-          articleMarketplaceContract: await loadContract<ArticleMarketplace>(
+          articleMarketplaceContract: await loadContract<
+            ArticleMarketplace & ERC721
+          >(
             "ArticleMarketplace",
             "0x5fbdb2315678afecb367f032d93f642f64180aa3",
             signer
@@ -87,12 +93,18 @@ const Web3Provider = ({ children }: Props) => {
           ),
         };
 
+        const hasLifetimeAccess = !!(
+          await contracts.passMinterContract["getTokenBalance()"]()
+        ).toNumber();
+        // const hasLifetimeAccess = !!nftBalance.toNumber();
+
         setWeb3Api(
           createWeb3State({
             provider,
             signer,
             contracts,
             isLoading: false,
+            hasLifetimeAccess,
           })
         );
       } else {
