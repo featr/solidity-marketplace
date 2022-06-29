@@ -17,9 +17,7 @@ type Props = {
   children?: ReactNode;
 };
 
-export interface IGenericContract<T> extends ethers.Contract {
-  // T
-}
+export interface IGenericContract<T> extends ethers.Contract {}
 
 export type TContracts = {
   articleMarketplaceContract?: ArticleMarketplace;
@@ -60,6 +58,7 @@ const createWeb3State = ({
 };
 
 const Web3Provider = ({ children }: Props) => {
+  // const [contractTest, setContracts] = useRecoilState(contractsAtom);
   const [web3Api, setWeb3Api] = useState<Web3Api>(
     createWeb3State({
       provider: null,
@@ -96,7 +95,6 @@ const Web3Provider = ({ children }: Props) => {
         const hasLifetimeAccess = !!(
           await contracts.passMinterContract["getTokenBalance()"]()
         ).toNumber();
-        // const hasLifetimeAccess = !!nftBalance.toNumber();
 
         setWeb3Api(
           createWeb3State({

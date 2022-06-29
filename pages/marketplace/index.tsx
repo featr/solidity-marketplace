@@ -19,6 +19,7 @@ export type TSubmitOrderInfo = {
 export default function Marketplace({ courses }: { courses: CourseContent[] }) {
   const {
     contracts: { articleMarketplaceContract },
+    hasLifetimeAccess,
   } = useWeb3();
   const { canPurchaseCourse, account } = useWalletInfo();
   const router = useRouter();
@@ -73,13 +74,21 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
             key={course.id}
             Footer={() => (
               <div className="mt-4">
-                <ConnectButton
-                  onClick={() => setSelectedCourse(course)}
-                  disabled={!canPurchaseCourse}
-                  variant="lightPurple"
-                >
-                  Purchase
-                </ConnectButton>
+                {hasLifetimeAccess ? (
+                  <ConnectButton
+                    onClick={() => router.push(`/articles/${course.slug}`)}
+                  >
+                    Read the article
+                  </ConnectButton>
+                ) : (
+                  <ConnectButton
+                    onClick={() => setSelectedCourse(course)}
+                    disabled={!canPurchaseCourse}
+                    variant="lightPurple"
+                  >
+                    Purchase
+                  </ConnectButton>
+                )}
               </div>
             )}
           />

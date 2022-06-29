@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 import "./Base.sol";
+import "./PassMinter.sol";
 
 contract ArticleMarketplace is Base {
+    address internal minterAddress;
+
     enum State {
         Purchased,
         Activated,
@@ -32,7 +35,14 @@ contract ArticleMarketplace is Base {
     /// You have provided wrong transaction amount.
     error WrongTransactionAmount();
 
+    /// You already have lifetime access.
+    error RedundantPurchase();
+
     receive() external payable {}
+
+    constructor() {
+        minterAddress = 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512;
+    }
 
     function purchaseArticle(bytes32 articleId, bytes32 proof)
         external
@@ -41,6 +51,12 @@ contract ArticleMarketplace is Base {
     {
         if (msg.value != 0.05 ether) {
             revert WrongTransactionAmount();
+        }
+
+        PassMinter minter = PassMinter(minterAddress);
+
+        if (minter.getTokenBalance(msg.sender) > 0) {
+            revert RedundantPurchase();
         }
 
         bytes32 articleHash = keccak256(
@@ -88,5 +104,9 @@ contract ArticleMarketplace is Base {
         returns (bool)
     {
         return ownedArticles[courseHash].owner == msg.sender;
+    }
+
+    function setMinterAddress(address addr) private onlyOwner {
+        minterAddress = addr;
     }
 }

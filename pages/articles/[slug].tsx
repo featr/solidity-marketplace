@@ -1,4 +1,5 @@
 import { useAccount, useOwnedCourse } from "@components/hooks/web3";
+import { useWeb3 } from "@components/providers";
 import { Modal } from "@components/ui/common";
 import { CourseHero, Curriculum, Keypoints } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
@@ -12,12 +13,16 @@ type ParamsSlug = {
 };
 
 export default function Course({ course }: { course: CourseContent }) {
+  const { hasLifetimeAccess } = useWeb3();
   const { account } = useAccount();
   const { ownedCourse } = useOwnedCourse(course, account);
   console.log("ownedCourse", ownedCourse);
   return (
     <>
-      <CourseHero {...course} hasAccess={!!ownedCourse.data} />
+      <CourseHero
+        {...course}
+        hasAccess={!!ownedCourse.data || hasLifetimeAccess}
+      />
       {/* <Keypoints points={course.wsl} />
       <Curriculum locked={true} /> */}
       <Modal />
