@@ -22,6 +22,9 @@ export const handler = (
     () => (provider ? "web3/accounts" : null),
     async () => {
       const accounts = await provider.listAccounts();
+      // const hasLifetimeAccess = !!(
+        //   await contracts.passMinterContract["getTokenBalance()"]()
+        // ).toNumber();
       const account = accounts[0];
       if (!account) {
         throw new Error(

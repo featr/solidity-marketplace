@@ -30,7 +30,6 @@ type Web3Api = {
   contracts: TContracts;
   isLoading: boolean;
   hooks: SetupHooks | null;
-  hasLifetimeAccess?: boolean;
 };
 
 type TUseWeb3 = {
@@ -44,7 +43,6 @@ const createWeb3State = ({
   contracts,
   isLoading,
   signer,
-  hasLifetimeAccess,
 }): Web3Api => {
   return {
     // web3,
@@ -53,7 +51,6 @@ const createWeb3State = ({
     contracts,
     isLoading,
     hooks: setupHooks(provider, contracts),
-    hasLifetimeAccess,
   };
 };
 
@@ -68,7 +65,6 @@ const Web3Provider = ({ children }: Props) => {
         passMinterContract: null,
       },
       isLoading: true,
-      hasLifetimeAccess: false,
     })
   );
   useEffect(() => {
@@ -92,9 +88,9 @@ const Web3Provider = ({ children }: Props) => {
           ),
         };
 
-        const hasLifetimeAccess = !!(
-          await contracts.passMinterContract["getTokenBalance()"]()
-        ).toNumber();
+        // const hasLifetimeAccess = !!(
+        //   await contracts.passMinterContract["getTokenBalance()"]()
+        // ).toNumber();
 
         setWeb3Api(
           createWeb3State({
@@ -102,7 +98,6 @@ const Web3Provider = ({ children }: Props) => {
             signer,
             contracts,
             isLoading: false,
-            hasLifetimeAccess,
           })
         );
       } else {

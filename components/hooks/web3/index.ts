@@ -1,4 +1,4 @@
-import { useHooks } from "@components/providers/web3";
+import { useHooks, useWeb3 } from "@components/providers/web3";
 import {
   AccountType,
   TCreateUseAccountHookReturn,
@@ -8,7 +8,7 @@ import { TCreateUseOwnedCourseHookReturn } from "@components/providers/web3/hook
 import { TCreateUseOwnedCoursesHookReturn } from "@components/providers/web3/hooks/useOwnedCourses";
 import { CourseContent } from "@content/courses/fetcher";
 import { useEffect } from "react";
-import { SWRResponse } from "swr";
+import useSWR, { SWRResponse } from "swr";
 
 // type GT<R> = SWRResponse<string, any> & TCreateUseOwnedCourseHookReturn;
 
@@ -42,10 +42,33 @@ export const useOwnedCourse = (
 export const useWalletInfo = () => {
   const { account } = useAccount();
   const { network } = useNetwork();
+  const { contracts } = useWeb3();
+
+  const { mutate, data } = useSWR(
+    () => (contracts ? "web3/tokenBalance" : null),
+    async () => {
+      // const accounts = await provider.listAccounts();
+      const hasLifetimeAccess = !!(
+        await contracts.passMinterContract["getTokenBalance()"]()
+      ).toNumber();
+
+      return hasLifetimeAccess;
+    }
+  );
+
+  useEffect(() => {
+    console.log("netowkr changed from wallet info");
+    if (network.isSupported) {
+      mutate(true);
+    } else {
+      mutate(false);
+    }
+  }, [network.isSupported]);
 
   return {
     account,
     network,
+    hasLifetimeAccess: data,
     canPurchaseCourse: !!(account.data && network.isSupported),
   };
 };

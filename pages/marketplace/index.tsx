@@ -7,7 +7,7 @@ import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { OrderModal } from "@components/ui/order";
 import { CourseContent, getAllCourses } from "@content/courses/fetcher";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { createArticleHash } from "@utils/hash";
 
@@ -19,9 +19,9 @@ export type TSubmitOrderInfo = {
 export default function Marketplace({ courses }: { courses: CourseContent[] }) {
   const {
     contracts: { articleMarketplaceContract },
-    hasLifetimeAccess,
+    // hasLifetimeAccess,
   } = useWeb3();
-  const { canPurchaseCourse, account } = useWalletInfo();
+  const { canPurchaseCourse, account, hasLifetimeAccess } = useWalletInfo();
   const router = useRouter();
   const [orderInfo, setOrderInfo] = useState<TSubmitOrderInfo>({
     loading: false,
@@ -30,6 +30,8 @@ export default function Marketplace({ courses }: { courses: CourseContent[] }) {
   const [selectedCourse, setSelectedCourse] = useState<null | CourseContent>(
     null
   );
+
+  useEffect(() => {}, []);
 
   const purchaseCourse = async (order) => {
     const articleIdHash = ethers.utils.id(selectedCourse.id);

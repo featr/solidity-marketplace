@@ -1,7 +1,10 @@
-import { useAccount, useOwnedCourse } from "@components/hooks/web3";
-import { useWeb3 } from "@components/providers";
+import {
+  useAccount,
+  useOwnedCourse,
+  useWalletInfo,
+} from "@components/hooks/web3";
 import { Modal } from "@components/ui/common";
-import { CourseHero, Curriculum, Keypoints } from "@components/ui/course";
+import { CourseHero } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
 import { CourseContent, getAllCourses } from "@content/courses/fetcher";
 import { GetStaticPaths, GetStaticProps } from "next/types";
@@ -13,7 +16,7 @@ type ParamsSlug = {
 };
 
 export default function Course({ course }: { course: CourseContent }) {
-  const { hasLifetimeAccess } = useWeb3();
+  const { hasLifetimeAccess } = useWalletInfo();
   const { account } = useAccount();
   const { ownedCourse } = useOwnedCourse(course, account);
   console.log("ownedCourse", ownedCourse);

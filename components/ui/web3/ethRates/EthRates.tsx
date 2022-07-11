@@ -3,13 +3,14 @@ import { useEthPrice } from "@components/hooks/useEthPrice";
 import { ConnectButton, Loader } from "@components/ui/common";
 import { useWeb3 } from "@components/providers";
 import { ethers } from "ethers";
+import { useWalletInfo } from "@components/hooks/web3";
 
 const EthRates = () => {
   const { eth } = useEthPrice();
   const {
     contracts: { passMinterContract },
-    hasLifetimeAccess,
   } = useWeb3();
+  const { hasLifetimeAccess } = useWalletInfo();
 
   const purchaseLifetimeAccess = async () => {
     try {
